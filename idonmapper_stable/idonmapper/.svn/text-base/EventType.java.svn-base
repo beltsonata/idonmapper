@@ -1,0 +1,9 @@
+package idonmapper;
+
+/*
+ * An idonmapper application event. 
+ */
+public enum EventType
+{
+    IDONS_ADDED, IDONS_REMOVED;
+}

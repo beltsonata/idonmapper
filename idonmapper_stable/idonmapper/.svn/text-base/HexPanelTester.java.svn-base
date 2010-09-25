@@ -1,0 +1,16 @@
+package idonmapper.testSuite;
+
+import org.junit.*;
+import static org.junit.Assert.*;
+
+import java.util.*;
+
+import junit.framework.*; 
+
+public class HexPanelTester extends TestCase
+{
+    
+    
+    
+    
+}

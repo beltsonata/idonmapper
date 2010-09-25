@@ -1,0 +1,274 @@
+package idonmapper;
+
+import java.awt.*;
+import javax.swing.*;
+import java.awt.geom.*;
+import java.awt.event.*;
+import javax.swing.event.*;
+import java.util.*;
+import net.miginfocom.swing.MigLayout;
+
+/* 
+ * Displays results retrieved from a web service
+ * using a SetRetriever object. Consists of a JPanel
+ * housing a JList. The JList is controlled by, currently,
+ * a DefaultListModel. This will probably change soon.
+
+ * Note that the main() method is included for testing purposes.
+ *
+ */
+public class SuggestionPanel extends JPanel implements Runnable
+{
+    private HashSet<String> suggestions;
+    private JList list;
+    private DefaultListModel listModel;
+    //private SetRetriever retriever = null;
+    private String currentSelection;
+
+	/* MINSIZE - the minimum size of the SuggestionPanel GUI */
+    public static final Dimension MINSIZE = new Dimension(200, 200);
+    public final int ROW_COUNT = 20;
+
+    private ArrayList<String> threadStringList;
+
+    // Whether or not the Suggestion panel
+    // should query the SetRetriever for a set
+    // based upon the contents of @threadStringList
+    protected boolean doRetrieveSet = false;
+
+
+    public SuggestionPanel()
+    {
+        super(new MigLayout());
+        setBackground(Color.WHITE);
+        suggestions = new HashSet<String>(40);
+        setUpList();
+        setPreferredSize(MINSIZE);
+    }
+
+    /**
+     * Retrieve a Set from the Controller's SetRetriever
+     * and update the contents of the JList.
+     */
+    public void run()
+    {
+        if(doRetrieveSet)
+        {
+            if(threadStringList == null)
+            {
+                throw new NullPointerException("Cannot run SuggestionPanel thread. "
+                    + "Ensure ArrayList<String> threadStringList has been set");
+            }
+            //System.out.println("running SuggestionPanel in new thread");
+            HashSet<String> set =
+                Controller.getSetRetriever().requestSet(threadStringList, true);
+            setSuggestions(set);
+        }
+
+    }
+    
+    /**
+     * Inputs an array of strings into the SuggestionPanel GUI.
+     */ 
+    protected void setThreadStringList(ArrayList<String> list)
+    {
+        threadStringList = list;
+    }
+
+
+    public String getCurrentSelection()
+    {
+        return currentSelection;
+    }
+
+    public Dimension getPreferredSize()
+    {
+        return MINSIZE;
+    }
+
+    /*
+     * Print out the contents of the JList (for debugging purposes)
+     */
+    public void printJList()
+    {
+        for(int i = 0; i < list.getModel().getSize(); ++i)
+        {
+            System.out.println(list.getModel().getElementAt(i));
+        }
+
+    }
+
+	/*
+	 * Sets up the SuggestionPanel's mouse listener to process mouse
+	 * clicks. More details follow below.
+	 */  
+    protected void setUpListListener()
+    {
+    	this.list.addMouseListener(new MouseAdapter()
+    	{
+            /*
+             * Deals with mouse clicks on the JList. 
+             * --If a user double clicks on a cell it is 
+             * set as @selectedCell. 
+             */
+    		public void mouseClicked(MouseEvent e)
+    		{
+				if(isDoubleClick(e))
+    			{
+                    Point mousePoint = e.getPoint();
+    				int i = list.locationToIndex(mousePoint);
+                    Rectangle rect = list.getCellBounds(i, i);
+                    
+                    if(rect == null)
+                    {
+                        //System.out.println("nothing to click on");
+                        return;
+                    }
+                    
+                    /* 
+                     * Check if the user double-clicked on   
+                     */
+                    if(rect.contains(mousePoint))
+                    {
+                        sendListItemToHexPanel(i);
+                    }
+    			}
+    		}
+    		/*
+    		 * Returns true if the mouse event contains
+    		 * a double click. Does not examine any other
+    		 * criteria.
+    		 */ 
+    		private boolean isDoubleClick(MouseEvent e)
+            {
+                if(e.getClickCount() == 2)
+                {
+                    return true;
+                }
+                return false;
+            }
+    	});
+    }
+
+    /*
+     * Sends the List item at @index to the HexPanel
+     * as an Idon.
+     * The item is then removed from this SuggestionPanel.
+     * This is called from mouseClicked() in the JList's
+     * mouse listener.
+     */
+    private void sendListItemToHexPanel(int index)
+    {
+        ListModel dlm = list.getModel();
+        Object o = dlm.getElementAt(index);
+        list.ensureIndexIsVisible(index);
+        currentSelection = o.toString();
+        System.out.println("Double clicked on " + currentSelection);
+        Coord coord = Controller.getHexPanel().getUnoccupiedCell();
+        Controller.getHexPanel().addIdon(coord, currentSelection);
+        listModel.removeElementAt(index);
+    }
+
+    /**
+     * Creates the list model, JList and adds
+     * it to the SuggestionPanel.
+     */
+    private void setUpList()
+    {
+        listModel = new DefaultListModel();
+
+        list = new JList(listModel);
+        list.setLayoutOrientation(JList.VERTICAL);
+        list.setVisibleRowCount(ROW_COUNT);
+        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        list.setVisible(true);
+        setUpListListener();
+
+        this.add(list);
+    }
+
+    /*
+     * Sets the @suggestions HashSet with suggestions.
+     * @set is to be delivered from the Controller
+     * module.
+     */
+    protected void setSuggestions(HashSet<String> set)
+    {
+        suggestions = set;
+        generateSuggestionList();
+    }
+
+    /**
+     * Clears the List Model of data, replacing it
+     * it with the contents of @suggestions.
+     */
+    private void generateSuggestionList()
+    {
+        assert(suggestions != null);
+        assert(listModel != null);
+        listModel.clear();
+        ArrayList<String> sList = new ArrayList<String>(suggestions);
+
+        for(String str : sList)
+        {
+            listModel.addElement(str);
+        }
+    }
+
+    protected HashSet<String> getSuggestions()
+    {
+        return suggestions;
+    }
+
+
+
+
+    public static void main(String[] args)
+    {
+    	if(args.length < 1)
+    	{
+    		System.out.println(args.length);
+    		System.out.println("Enter something for the set retriever..... ;)");
+    		return;
+    	}
+    	// Test data:
+    	final HashSet<String> set = new HashSet<String>();
+
+    	for(String s : args)
+    	{
+    		set.add(s);
+    	}
+
+        SwingUtilities.invokeLater(new Runnable()
+        {
+            public void run()
+            {
+            	SuggestionPanel sp;
+            	SetRetriever retriever;
+            	JScrollPane scroller;
+            	JFrame frame;
+
+                Controller.getSetRetriever().requestSet(new ArrayList<String>(set), true);
+
+                Controller.getSetRetriever().printOutSet();
+
+                sp = new SuggestionPanel();
+                Controller.getSetRetriever().printOutSet();
+                sp.setSuggestions(Controller.getSetRetriever().getResultsSet());
+
+                scroller = new JScrollPane(sp);
+
+                scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+                scroller.getVerticalScrollBar().setUnitIncrement(8);
+
+                frame = new JFrame();
+                frame.setPreferredSize(sp.MINSIZE);
+                frame.getContentPane().add(scroller);
+                frame.pack();
+                frame.setVisible(true);
+
+
+            }
+        });
+    }
+}

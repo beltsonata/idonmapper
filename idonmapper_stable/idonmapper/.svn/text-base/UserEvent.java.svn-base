@@ -1,0 +1,18 @@
+package idonmapper;
+
+/*
+ * User Events are those events that the idonmapper
+ * application records in the Controller.userEventStack.
+ * This is so that the Controller can perform Undo/Redo
+ * functions (although they aren't yet implemented).
+ */
+public class UserEvent 
+{
+    EventType type;
+    public UserEvent(EventType type)
+    {
+        this.type = type;
+    }
+    
+
+}

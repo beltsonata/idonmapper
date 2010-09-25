@@ -1,0 +1,8 @@
+
+/home2/svn/idonmapper_stable/idonmapper/HexPanel.java:1052	Avoid unnecessary return statements
+/home2/svn/idonmapper_stable/idonmapper/Idon.java:247	Avoid unnecessary return statements
+/home2/svn/idonmapper_stable/idonmapper/IdonMapFileHandler.java:195	These nested if statements could be combined
+/home2/svn/idonmapper_stable/idonmapper/IdonMapFileHandler.java:527	These nested if statements could be combined
+/home2/svn/idonmapper_stable/idonmapper/KeyboardInputPanel.java:332	These nested if statements could be combined
+/home2/svn/idonmapper_stable/idonmapper/KeyboardInputPanel.java:367	These nested if statements could be combined
+/home2/svn/idonmapper_stable/idonmapper/KeyboardInputPanel.java:389	Avoid unnecessary return statements

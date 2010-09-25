@@ -1,0 +1,6 @@
+
+/home2/svn/idonmapper_stable/idonmapper/Controller.java:1	A high number of imports can indicate a high degree of coupling within an object.
+/home2/svn/idonmapper_stable/idonmapper/HexPanel.java:268	Avoid using implementation types like 'ArrayList'; use the interface instead
+/home2/svn/idonmapper_stable/idonmapper/HexPanel.java:283	Avoid using implementation types like 'ArrayList'; use the interface instead
+/home2/svn/idonmapper_stable/idonmapper/HexPanel.java:1198	Avoid using implementation types like 'HashSet'; use the interface instead
+/home2/svn/idonmapper_stable/idonmapper/Idon.java:56	Avoid using implementation types like 'ArrayList'; use the interface instead

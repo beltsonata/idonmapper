@@ -1,0 +1,6 @@
+package idonmapper;
+
+public enum UserEventType
+{
+    IDONS_ADDED, IDONS_REMOVED;
+}

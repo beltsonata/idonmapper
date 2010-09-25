@@ -1,0 +1,32 @@
+package idonmapper;
+
+/*
+ * A coordinate on a Hexagon grid.
+ */
+public class Coord
+{
+    public int x, y;
+
+    public Coord(int x, int y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+
+    public String toString()
+    {
+        return "x: " + x + ", " + "y: " + y;
+    }
+
+    public boolean equals(Coord c)
+    {
+        if(this.x == c.x)
+        {
+            if(this.y == c.y)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+}

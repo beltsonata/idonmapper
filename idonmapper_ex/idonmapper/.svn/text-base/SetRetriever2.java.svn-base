@@ -1,0 +1,413 @@
+package idonmapper;
+import java.io.*;
+//import org.apache.commons.httpclient.*;
+import java.net.*;
+import java.util.*;
+import org.w3c.tidy.Tidy;
+import org.w3c.dom.*;
+
+/* 
+ * for programmer's reference: 
+ * http://labs.google.com/sets?hl=en&q1=sonic+youth+&q2=dinosaur+jr&q3=melvins&q4=sebadoh&q5=burning+airlines&btn=Large+Set
+ */
+
+
+public class SetRetriever2
+{
+    private URL googleSets;
+    final String URLSTRINGTEMPLATE = "http://labs.google.com/sets?hl=en";
+    private HttpURLConnection connection;
+    public final String ENCODING = "utf-8";
+    private ArrayList<String> ideasList;
+    protected boolean isLargeSet;
+    private Document doc;
+    private Tidy tidy;
+    protected HashSet<String> resultsSet;
+    
+    public SetRetriever2(ArrayList<String> list, boolean isLargeSet)
+    {
+        this.isLargeSet = isLargeSet;
+        if(list.size() > 5)
+        {
+            trimIdeasList(list);
+        }
+        ideasList = encodeUserConcepts(list);
+        this.resultsSet = new HashSet<String>();
+        String urlString = createURLString(ideasList);
+        connection = getURLConnection(createURL(urlString));
+        setUpConnection(connection);
+        InputStream i = getConnectionInput(connection);
+        doc = parseURLStreamToDOM(i);
+        getSetDataFromDOM(doc);
+        printOutSet();
+    }
+    private void getSetDataFromDOM(Document doc)
+    {
+        Node n = locateTableNode(doc);
+        Element e = (Element)n;
+        NodeList nl = e.getElementsByTagName("a");
+        getTextFromNodeList(nl);
+    }
+    
+    public HashSet<String> getResultsSet()
+    {
+        return resultsSet;
+    }
+   
+    protected void printOutSet()
+    {
+        Iterator i = resultsSet.iterator();
+        while(i.hasNext())
+        {
+            System.out.println(i.next());
+        }
+    }
+    /*
+     * Recursively searches the node tree for '#text' strings,
+     * adding to the resultsSet as it goes.
+     */
+    private void getTextFromNodeList(NodeList nl)
+    {
+        for(int i = 0; i < nl.getLength(); ++i)
+        {
+            Node n = nl.item(i);
+            if(n.hasChildNodes())
+            {
+                getTextFromNodeList(n.getChildNodes());
+            }
+            else
+            {
+                if(n.getNodeType() == Node.TEXT_NODE)
+                {
+                    //printOutNode(n);
+                    resultsSet.add(n.getNodeValue());
+                }
+            }
+        }
+    }
+    
+    /*
+     * For debugging purposes. :)
+     */
+    private void printOutNode(Node n)
+    {
+        if(n != null)
+        {
+            if(n.getNodeName() != null)
+            {
+                System.out.print(n.getNodeName());
+            }
+            if(n.getNodeValue() != null)
+            {
+                System.out.println(" " + n.getNodeValue());
+            }
+            else
+            {
+                System.out.println();
+            }
+        }
+    }
+    
+    /*
+     * For debugging purposes. 
+     * Prints out the name and values of the nodes
+     * in a node list, and their children, 
+     * recursively.
+     */
+    public void printOutNodeList(NodeList list)
+    {
+        if(list == null)
+        {
+            return;
+        }
+        for(int i = 0; i < list.getLength(); ++i)
+        {
+            Node n = list.item(i);
+            printOutNode(n);
+            
+            if(n.hasChildNodes())
+            {
+                printOutNodeList(n.getChildNodes());
+                //System.out.println("recursing!");
+            }
+            else
+            {
+                //System.out.println("No children.");
+            }
+        }
+        
+    }
+    
+    /*
+     * Locates the table containing the 'summary' attribute,
+     * which (_should_) contain the set retur
+     */
+    private Node locateTableNode(Document doc)
+    {
+        NodeList n = doc.getElementsByTagName("table");
+        
+        for(int i = 0; i < n.getLength(); ++i)
+        {
+            Node node = n.item(i);
+            Element e = (Element)node;
+            Attr a = e.getAttributeNode("summary");
+            // ^ only the sets-data table in the 
+            // google sets html source has a 'summary' attribute.
+            
+            if(a != null)
+            {
+                return node;
+            }
+        }
+        return null;
+    }
+  
+    
+    
+    /*
+     * Encode the user's idea(s) into utf-8 format prior to sending 
+     * to Google Sets.
+     */
+    private ArrayList<String> encodeUserConcepts(ArrayList<String> ideas)
+    {
+        System.out.println("encoding user's Strings to " + ENCODING);
+        ArrayList<String> encodedStrings = new ArrayList<String>(ideas.size());
+        
+        for(String s : ideas)
+        {
+            try
+            {
+                encodedStrings.add(URLEncoder.encode(s, ENCODING));   
+            }
+            catch(UnsupportedEncodingException e)
+            {
+                errorExit(e);
+            }
+        }
+        return encodedStrings;
+    }
+    
+    private InputStream getConnectionInput(HttpURLConnection c)
+    {
+        try
+        {
+            InputStream i = c.getInputStream();
+            return i;
+        }
+        catch(Exception e)
+        {
+            errorExit(e);
+        }
+        return null;
+    }
+    
+    private OutputStream getConnectionOutput(HttpURLConnection c)
+    {
+        try
+        {
+            OutputStream o = c.getOutputStream();
+            return o;
+        }
+        catch(Exception e)
+        {
+            errorExit(e);
+        }
+        return null;
+    }
+    
+    private void setUpConnection(HttpURLConnection c)
+    {
+        c.setDoOutput(true);
+        //c.setDoInput(true);
+        try
+        {
+            c.setRequestMethod("GET");
+        }
+        catch(Exception e)
+        {
+            errorExit(e);
+        }
+    }
+    
+    private BufferedReader createStreamReader(InputStream stream)
+    {
+        BufferedReader in = new BufferedReader(new InputStreamReader(stream));
+        return in;
+    }
+    
+    /*
+     * Allows the coder to print out the url
+     * connection stream (for debugging purposes).
+     */
+    private void printOutUrlSource(InputStream inStream)
+    {
+        BufferedReader in = createStreamReader(inStream);
+        String s;
+        try
+        {
+            while((s = in.readLine()) != null)
+            {
+                System.out.println(s);
+            }
+        }
+        catch(IOException e)
+        {
+            errorExit(e);
+        }    
+    }
+    
+    private Tidy setUpTidy()
+    {
+        tidy = new Tidy();
+        tidy.setQuiet(true);
+        tidy.setShowWarnings(false);
+        return tidy;
+    }
+    
+    /*
+     * Creates the DOM document (in the 'doc' variable)
+     * by parsing the Google Sets html using JTidy.
+     */
+    private Document parseURLStreamToDOM(InputStream i)
+    {
+        Tidy tidy = setUpTidy();
+        Document doc = tidy.parseDOM(i , null);
+        try
+        {
+            i.close();
+            System.out.println("tidy successfully created DOM");
+            return doc;
+        }
+        catch(IOException e)
+        {
+            errorExit(e);
+        }
+        return null;
+    }
+    
+    /*
+     * Constructs a URL string based upon the user's list.
+     */ 
+    private String createURLString(ArrayList<String> list)
+    {
+        // This assumes that the list is already encoded into 
+        // that specified in the ENCODING constant.
+        
+        String urlString = "http://labs.google.com/sets?hl=en";
+        
+        for(int i = 0; i < list.size(); ++i)
+        {
+            urlString = urlString.concat(toQueryString(list.get(i), (i+1)));
+        }
+        
+        urlString = urlString.concat("&btn=");
+        
+        if(isLargeSet)
+        {
+            urlString = urlString.concat("Large+Set");
+        }
+        else
+        {
+            urlString = urlString.concat("Small+Set");
+        }
+        System.out.println("url string == " + urlString);
+        return urlString;
+    }
+    
+    private String toQueryString(String s, Integer n)
+    {
+        assert((n > 0) && (n <= 5));
+        String q = "&q";
+        q = q.concat(n.toString());
+        q = q.concat("=");
+        q = q.concat(s);
+        return q;
+    }
+  
+    
+    private URL createURL(String s)
+    {
+        //System.out.println("creating URL from " + s);
+        try
+        {
+            URL url = new URL(s);
+            return url;
+        }
+        catch(MalformedURLException e)
+        {
+            System.out.println("URL could not be recognised: " + s);
+            errorExit(e);
+        }
+        return null;
+    }
+    private HttpURLConnection getURLConnection(URL u)
+    {
+        try
+        {
+            HttpURLConnection connection = 
+                (HttpURLConnection)u.openConnection();
+            System.out.println("made httpUrlConnection");
+            return connection;
+        }
+        catch(Exception e)
+        {
+            errorExit(e);
+        }
+        return null;
+    }
+    /*
+     * Shrinks the ideas list down to 5 for use in
+     * Google Sets.
+     */
+    private void trimIdeasList(ArrayList<String> list)
+    {
+        // jump to the 
+        for(int i = 4; i < list.size(); ++i)
+        {  
+            list.remove(i);    
+        }    
+        System.out.println("new list is: ");
+    }
+    
+    private void printList(ArrayList<String> list)
+    {
+        for(String s : list)
+        {
+            System.out.println(s);
+        }
+        System.out.println("list size is " + list.size());
+    }
+    
+    public static void main(String args[])
+    {
+        ArrayList<String> list = new ArrayList<String>();
+        for(String s : args)
+        {
+            list.add(s);
+        }
+        if(list.isEmpty())
+        {
+            System.out.println("Please enter up to 5 words to send to Google Sets.");
+            System.exit(-1);
+        }
+        /*
+        
+            list.add("sonic youth");
+            list.add("dinosaur jr");
+            list.add("melvins");
+            list.add("burning airlines");
+            list.add("faraquet");
+            list.add("fugazi");
+            list.add("squarepusher");
+        
+        */
+        System.out.println("list size is " + list.size());
+        
+        SetRetriever2 sr = new SetRetriever2(list, true);
+    }
+    private void errorExit(Exception e)
+    {
+        e.printStackTrace();
+        System.exit(-1);
+    }
+}

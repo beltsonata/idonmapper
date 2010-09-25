@@ -1,0 +1,2 @@
+#java -cp :lib/miglayout-3.7.2.jar:lib/jericho-html-3.1.jar:lib/jxlayer.jar:lib/swingx-1.6.1.jar:lib/batik.jar:lib/batik-dom.jar:lib/batik-svg-dom.jar:lib/batik-svggen.jar:lib/batik-awt-util.jar:lib/batik-util.jar:lib/batik-xml.jar:lib/xml-apis.jar:lib/batik-ext.jar: idonmapper.Start
+java -cp :lib/miglayout-3.7.2.jar:lib/jericho-html-3.1.jar:lib/jxlayer.jar:lib/swingx-1.6.1.jar:lib/xmlgraphics-commons-1.4.jar: idonmapper.Start

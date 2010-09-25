@@ -1,0 +1,40 @@
+
+/home2/svn/idonmapper_stable/idonmapper/ArrowPainter.java:27	Document empty constructor
+/home2/svn/idonmapper_stable/idonmapper/ArrowPainter.java:35	Overridable method 'setStartPoint' called during object construction
+/home2/svn/idonmapper_stable/idonmapper/ConceptDisplayer.java:17	Possible unsafe assignment to a non-final static field in a constructor.
+/home2/svn/idonmapper_stable/idonmapper/ConceptDisplayer.java:20	Possible unsafe assignment to a non-final static field in a constructor.
+/home2/svn/idonmapper_stable/idonmapper/ConceptDisplayer.java:21	Possible unsafe assignment to a non-final static field in a constructor.
+/home2/svn/idonmapper_stable/idonmapper/Controller.java:61	All methods are static.  Consider using Singleton instead.  Alternatively, you could add a private constructor or make the class abstract to silence this warning.
+/home2/svn/idonmapper_stable/idonmapper/Controller.java:717	Avoid if (x != y) ..; else ..;
+/home2/svn/idonmapper_stable/idonmapper/Controller.java:737	Avoid if (x != y) ..; else ..;
+/home2/svn/idonmapper_stable/idonmapper/Controller.java:826	Singleton is not thread safe
+/home2/svn/idonmapper_stable/idonmapper/Controller.java:1133	Position literals first in String comparisons
+/home2/svn/idonmapper_stable/idonmapper/Controller.java:1695	Avoid if (x != y) ..; else ..;
+/home2/svn/idonmapper_stable/idonmapper/Controller.java:2007	Singleton is not thread safe
+/home2/svn/idonmapper_stable/idonmapper/Direction.java:11	Document empty constructor
+/home2/svn/idonmapper_stable/idonmapper/Direction.java:20	Switch statements should have a default label
+/home2/svn/idonmapper_stable/idonmapper/Direction.java:61	Avoid if (x != y) ..; else ..;
+/home2/svn/idonmapper_stable/idonmapper/Direction.java:66	Switch statements should have a default label
+/home2/svn/idonmapper_stable/idonmapper/Direction.java:93	Switch statements should have a default label
+/home2/svn/idonmapper_stable/idonmapper/HexPanel.java:116	Overridable method 'setGridDimensions' called during object construction
+/home2/svn/idonmapper_stable/idonmapper/HexPanelKeyListener.java:33	Document empty method
+/home2/svn/idonmapper_stable/idonmapper/HexPanelListener.java:63	Document empty method
+/home2/svn/idonmapper_stable/idonmapper/HexPanelMouseManager.java:61	Document empty method
+/home2/svn/idonmapper_stable/idonmapper/Idon.java:373	Switch statements should have a default label
+/home2/svn/idonmapper_stable/idonmapper/IdonMapFileHandler.java:29	Perhaps 'source' could be replaced by a local variable.
+/home2/svn/idonmapper_stable/idonmapper/IdonMapFileHandler.java:30	Perhaps 'trans' could be replaced by a local variable.
+/home2/svn/idonmapper_stable/idonmapper/IdonMapFileHandler.java:416	Avoid reassigning parameters such as 'idons'
+/home2/svn/idonmapper_stable/idonmapper/IdonMover.java:88	Avoid reassigning parameters such as 'p'
+/home2/svn/idonmapper_stable/idonmapper/IdonMover.java:160	Avoid reassigning parameters such as 'p'
+/home2/svn/idonmapper_stable/idonmapper/IdonTextEditor.java:120	Document empty method
+/home2/svn/idonmapper_stable/idonmapper/IdonTextEditor.java:125	Document empty method
+/home2/svn/idonmapper_stable/idonmapper/KeyboardInputPanel.java:88	Overridable method 'performNewIdonCreationAction' called during object construction
+/home2/svn/idonmapper_stable/idonmapper/KeyboardInputPanel.java:214	Document empty method
+/home2/svn/idonmapper_stable/idonmapper/PostscriptExporter.java:12	Document empty constructor
+/home2/svn/idonmapper_stable/idonmapper/SetRetriever.java:34	Document empty constructor
+/home2/svn/idonmapper_stable/idonmapper/SetRetriever.java:41	Document empty constructor
+/home2/svn/idonmapper_stable/idonmapper/SetRetriever.java:46	Non-static initializers are confusing
+/home2/svn/idonmapper_stable/idonmapper/Start.java:19	All methods are static.  Consider using Singleton instead.  Alternatively, you could add a private constructor or make the class abstract to silence this warning.
+/home2/svn/idonmapper_stable/idonmapper/UppercaseDocFilter.java:13	Document empty constructor
+/home2/svn/idonmapper_stable/idonmapper/UppercaseDocFilter.java:22	When doing a String.toLowerCase()/toUpperCase() call, use a Locale
+/home2/svn/idonmapper_stable/idonmapper/UppercaseDocFilter.java:30	When doing a String.toLowerCase()/toUpperCase() call, use a Locale

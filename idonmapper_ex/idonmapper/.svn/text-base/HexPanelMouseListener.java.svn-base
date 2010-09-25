@@ -1,0 +1,167 @@
+package idonmapper;
+
+import java.awt.*;
+import javax.swing.*;
+import java.awt.geom.*;
+import java.awt.event.*;
+import javax.swing.event.*;
+import java.util.*;
+
+/**
+ * Defines a HexPanel's MouseListener. 
+ */
+public class HexPanelMouseListener extends MouseInputAdapter
+{
+    protected boolean mouseDraggingIdon = false;
+    private Coord draggedIdonCoord;
+    protected Idon draggedIdon;
+    
+    public HexPanelMouseListener()
+    {
+        Controller.getHexPanel().addMouseListener(this);
+    }
+    
+    /**
+     * Deal with mousePressed (mouse down) events on the HexPanel.
+     */
+    public void mousePressed(MouseEvent e)
+    {
+        if(!mouseDraggingIdon)
+        {
+            if(isButton(e, 1))
+            {
+                Coord oldPos = Controller.getHexPanel().(e);
+                if(Controller.getHexPanel().cellContainsIdon(oldPos))
+                {
+                    pickUpIdon(oldPos);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Deal with mouseReleased (mouse up) events on the HexPanel.
+     */
+    public void mouseReleased(MouseEvent e)
+    {                    
+        if(mouseDraggingIdon)
+        {
+            Coord newPos = Controller.getHexPanel()
+            						 .getCoordFromMousePoint(e);
+            
+            if(!Controller.getHexPanel().cellContainsIdon(newPos))
+            {
+                moveIdon(draggedIdon, draggedIdonCoord, newPos);
+            }
+            else
+            {
+                mouseDraggingIdon = false;
+            }   
+        }
+    }
+    
+    
+    /**
+     * Deal with mouse clicke events on the HexPanel.
+     */
+    public void	mouseClicked(MouseEvent e) 
+    {   
+        Coord c = Controller.getHexPanel().getCoordFromMousePoint(e);
+        
+        /*
+         * Deal with double clicks from right mouse button
+         */
+        if(thirdButtonDoubleClick(e))
+        {
+            System.out.println("mouse " + e.getButton() + " clicked");   
+            if(Controller.getHexPanel().cellContainsIdon(c))
+            {
+                Controller.getHexPanel().removeIdon(c);
+            }
+        }
+        
+        /*
+         * Deal with single clicks from left mouse button.
+         */
+        else if(firstButtonSingleClick(e))
+        {
+            System.out.print("mouse "  + " clicked ");
+           
+            if(Controller.getHexPanel().cellContainsIdon(c))
+            {
+                Idon i = Controller.getHexPanel().getIdonFromCoord(c);
+                
+                HashSet<Idon> linked = new HashSet<Idon>();
+                Controller.getHexPanel().getAllLinked(i, linked);
+                System.out.println("Cluster:");
+                
+                for(Idon idon : new ArrayList<Idon>(linked))
+                {
+                    System.out.print(idon + ", ");
+                }
+                System.out.println();
+            }
+            else // clicked outside of all cells
+            {
+                System.out.print("\n");
+                Controller.getHexPanel().printOutAllLinkedSets(
+                Controller.getHexPanel().collectAllLinkedSets());
+            }
+        }
+    }
+    
+    private boolean firstButtonSingleClick(MouseEvent e)
+    {
+        if(isButton(e, 1) && e.getClickCount() == 1)
+        {
+            return true;
+        }
+        return false;
+    }
+    
+    private boolean isButton(MouseEvent e, int n)
+    {
+        if(e.getButton() == n)
+        {
+            return true;
+        }
+        return false;
+    }
+    
+    private boolean thirdButtonDoubleClick(MouseEvent e)
+    {
+        if(e.getButton() == 3 && e.getClickCount() == 2)
+        {
+            return true;
+        }
+        return false;
+    }
+    
+    private void moveIdon(Idon i, Coord oldPos, Coord newPos)
+    {
+        System.out.println("idon " + draggedIdon + 
+                           " dropped over empty cell "+ newPos);
+        
+        Controller.getHexPanel().removeIdon(oldPos);
+        Controller.getHexPanel().addIdon(newPos, i.toString());
+        mouseDraggingIdon = false;
+        draggedIdon = null;
+        draggedIdonCoord = null;
+        Controller.getHexPanel().repaint();
+    } 
+    
+    private void pickUpIdon(Coord oldPos)
+    {
+        draggedIdon = Controller.getHexPanel().getIdonFromCoord(oldPos);
+        
+        if(draggedIdon == null)
+        {
+            throw new NullPointerException("no idon to drag!");
+        }
+        
+        draggedIdonCoord = oldPos;
+        mouseDraggingIdon = true;
+        System.out.println("mouse started dragging idon "
+                            + draggedIdon + " from " + oldPos);
+    }
+}

@@ -1,0 +1,21 @@
+
+/home2/svn/idonmapper_stable/idonmapper/Arrow.java:26	Parameter 'start' is not assigned and could be declared final
+/home2/svn/idonmapper_stable/idonmapper/Arrow.java:32	Parameter 'p' is not assigned and could be declared final
+/home2/svn/idonmapper_stable/idonmapper/Arrow.java:45	Parameter 'g' is not assigned and could be declared final
+/home2/svn/idonmapper_stable/idonmapper/Arrow.java:62	Parameter 'xPos' is not assigned and could be declared final
+/home2/svn/idonmapper_stable/idonmapper/Arrow.java:62	Parameter 'yPos' is not assigned and could be declared final
+/home2/svn/idonmapper_stable/idonmapper/ArrowPainter.java:33	Parameter 'start' is not assigned and could be declared final
+/home2/svn/idonmapper_stable/idonmapper/ArrowPainter.java:47	Parameter 'start' is not assigned and could be declared final
+/home2/svn/idonmapper_stable/idonmapper/ArrowPainter.java:58	Parameter 'p' is not assigned and could be declared final
+/home2/svn/idonmapper_stable/idonmapper/ArrowPainter.java:67	Parameter 'p' is not assigned and could be declared final
+/home2/svn/idonmapper_stable/idonmapper/ConceptDisplayer.java:152	Avoid instantiating new objects inside loops
+/home2/svn/idonmapper_stable/idonmapper/HexPanel.java:678	Avoid instantiating new objects inside loops
+/home2/svn/idonmapper_stable/idonmapper/HexPanel.java:679	Avoid instantiating new objects inside loops
+/home2/svn/idonmapper_stable/idonmapper/Idon.java:377	Avoid instantiating new objects inside loops
+/home2/svn/idonmapper_stable/idonmapper/Idon.java:381	Avoid instantiating new objects inside loops
+/home2/svn/idonmapper_stable/idonmapper/Idon.java:385	Avoid instantiating new objects inside loops
+/home2/svn/idonmapper_stable/idonmapper/Idon.java:504	Avoid instantiating new objects inside loops
+/home2/svn/idonmapper_stable/idonmapper/IdonMover.java:140	Avoid instantiating new objects inside loops
+/home2/svn/idonmapper_stable/idonmapper/IdonMover.java:173	Avoid instantiating new objects inside loops
+/home2/svn/idonmapper_stable/idonmapper/IdonMover.java:225	Avoid instantiating new objects inside loops
+/home2/svn/idonmapper_stable/idonmapper/KeyboardInputPanel.java:373	Avoid instantiating new objects inside loops
