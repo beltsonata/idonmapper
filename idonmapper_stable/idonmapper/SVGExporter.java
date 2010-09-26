@@ -9,8 +9,8 @@ import org.w3c.dom.*;
 /**
  * Not working. SVG files created by this don't display anything
  * but a white background!
- */ 
-/*public class SVGExporter
+ */ /*
+public class SVGExporter
 {
     private static Document doc;
     private static DOMImplementation DOMimp;
@@ -27,10 +27,12 @@ import org.w3c.dom.*;
         doc = DOMimp.createDocument(svgURL, "svg", null);
         svgGen = new SVGGraphics2D(doc);
         
-        Rectangle vis = Controller.getHexPanel().visibleArea();
+        //Rectangle vis = Controller.getHexPanel().visibleArea();
         
-        svgGen.setSVGCanvasSize(new Dimension((int)vis.getWidth(), 
-                                              (int)vis.getHeight()));
+        //svgGen.setSVGCanvasSize(new Dimension((int)vis.getWidth(), 
+          //                                    (int)vis.getHeight()));
+        
+        svgGen.setSVGCanvasSize(hp.calculateMinimumSize());
            
         hp.paintComponent(svgGen);
         
@@ -75,5 +77,5 @@ import org.w3c.dom.*;
         return true;
     }
     
-}
-*/
+}*/
+

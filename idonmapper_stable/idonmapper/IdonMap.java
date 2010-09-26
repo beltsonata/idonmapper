@@ -3,7 +3,7 @@ import java.util.*;
 import java.awt.Point;
 
 /**
- * Represents the saved state information an idonmapper map. 
+ * Represents the saved state information an idonmapper map.
  */ 
 public class IdonMap 
 {

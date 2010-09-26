@@ -15,7 +15,7 @@ import org.jdesktop.swingx.*;
 
 
 /**
- * An arrow that is drawn on the HexPanel by the user with an.
+ * An arrow that is drawn on the HexPanel by the user with an ArrowPainter.
  */ 
 public class Arrow implements HexPanelObject
 {

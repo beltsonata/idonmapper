@@ -8,9 +8,7 @@ public enum Direction
 {
     NE, E, SE, SW, W, NW;
 
-    Direction()
-    {
-    }
+    Direction(){}
     
     /**
      * Returns the opposite direction to @dir.
