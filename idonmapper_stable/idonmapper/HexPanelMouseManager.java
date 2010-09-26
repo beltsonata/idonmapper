@@ -11,7 +11,7 @@ import java.util.*;
  * Defines the procedures for handling MouseEvents on 
  * the HexPanel. 
  */
-// no longer used
+// no longer used, all done in the Controller
 public class HexPanelMouseManager extends MouseInputAdapter  
 {
     public HexPanelMouseManager()
@@ -48,6 +48,7 @@ public class HexPanelMouseManager extends MouseInputAdapter
      */
     public void mouseReleased(final MouseEvent e)
     {     
+
         Controller.hexPanelMouseReleased(e);      
     }
     

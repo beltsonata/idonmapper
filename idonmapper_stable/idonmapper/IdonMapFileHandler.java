@@ -18,7 +18,7 @@ import org.xml.sax.*;
 
 import java.io.*;
 import java.awt.Color;
-import java.awt.Rectangle;
+import java.awt.Point;
 
 /**
  * Allows the saving and retrieving of IdonMaps into the application.
@@ -31,40 +31,77 @@ public class IdonMapFileHandler implements ErrorHandler
     private DOMSource source;
     private Transformer trans;
     private boolean containsFatalError = false;
-    
+    public final static String DTD_STRING = 
+        "<!ELEMENT idon-map (map-name, cell-size, idons, suggestions,"
+        + "view-position)>\n<!ELEMENT map-name (#PCDATA)>\n"
+        + "<!ELEMENT cell-size (#PCDATA)>\n<!ELEMENT idons (idon*)>\n"
+        + "<!ELEMENT idon (coord,idea,color,size)>\n"
+        + "<!ELEMENT coord (x-coord,y-coord)>\n"
+        + "<!ELEMENT x-coord (#PCDATA)>\n<!ELEMENT y-coord (#PCDATA)>\n"
+        + "<!ELEMENT idea (#PCDATA)>\n<!ELEMENT color (red,green,blue)>\n"
+        + "<!ELEMENT red (#PCDATA)>\n<!ELEMENT green (#PCDATA)>\n"
+        + "<!ELEMENT blue (#PCDATA)>\n<!ELEMENT size (#PCDATA)>\n"
+        + "<!ELEMENT suggestions (suggestion*)>\n<!ELEMENT suggestion "
+        + "(#PCDATA)>\n<!ELEMENT view-position (x-pos,y-pos)>\n"
+        + "<!ELEMENT x-pos (#PCDATA)>\n<!ELEMENT y-pos (#PCDATA)>";
+        
     /*
      * Local reference to the dtd file for parsing
      * idonmapper xml files (assuming that the dtd file is
      * in the idonmapper base directory):
      * 
-     * BASE/idonmapper/NAME_OF_DTD_FILE
+     * 
+     * BASE/dtd/NAME_OF_DTD_FILE
+     * 
+     * If it does exist it is created from the DTD_STRING above.
      */ 
-    public final static String DTD_FILE_PATH = "idonmapper/idon-map.dtd";
+    public static String DTD_FILE_PATH = "idon-map.dtd";
     
-    /*
-     * The *absolute* path of the above dtd file path,
-     * which is necessary when exporting xml files
-     * so that the dtd can be found when 
-     */ 
-    private String absoluteDTDPath; 
-    
+    private String absoluteDTDPath;
     private int errors = 0;
     private int warnings = 0;
-        
+    private File dtdFile;
+    
+    
     public IdonMapFileHandler()
     {
-        loadDTD();    
+        loadDTD();       
+    }
+    
+    private void createDTD()
+    {
+        System.out.println("creating DTD file");
+        try
+        {
+            dtdFile.createNewFile();
+            FileWriter wr = new FileWriter(dtdFile);
+            BufferedWriter bw = new BufferedWriter(wr);
+            bw.write(DTD_STRING, 0, DTD_STRING.length());
+            System.out.println("created DTD at " + dtdFile.getCanonicalPath());
+            bw.close();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
     
     private void loadDTD()
     {
-        final File dtdFile = new File(DTD_FILE_PATH);
+        String path = System.getProperty("user.home");
+        path = path.concat(System.getProperty("file.separator"));
+        path = path.concat(DTD_FILE_PATH);
         
-        if(dtdFile == null)
+        System.out.println("load dtd path: " + path);
+        
+        dtdFile = new File(path);
+        
+        if(!dtdFile.exists())
         {
-            throw new NullPointerException("Failed to load dtd file");
+            //throw new NullPointerException("Failed to load dtd file");
+            createDTD();
         } 
-        absoluteDTDPath = dtdFile.getAbsolutePath();
+        //absoluteDTDPath = dtdFile.getAbsolutePath();
     }
     
     /**
@@ -129,7 +166,9 @@ public class IdonMapFileHandler implements ErrorHandler
         mapName = retrieveMapName(allNodes);
         cellSize = (int)retrieveNumberFromTextNode(allNodes, "cell-size");
         idons = retrieveIdons(allNodes);
-        final Rectangle view = retrieveViewRect(allNodes);
+        //final Rectangle view = retrieveViewRect(allNodes);
+        final Point view = retrieveViewPoint(allNodes);
+        
         suggestions = retrieveSuggestions(allNodes);
         return new IdonMap(mapName, cellSize, idons, suggestions, view);
     }
@@ -164,16 +203,17 @@ public class IdonMapFileHandler implements ErrorHandler
      * Retrieves the view port information from a
      * NodeList and returns a Rectangle.
      */ 
-    private Rectangle retrieveViewRect(final NodeList allNodes)
+    private Point retrieveViewPoint(final NodeList allNodes)
     {
         //NodeList children = allNodes.getChildNodes();
         final NodeList rectNodes = getChildNodesFromString(allNodes, 
                                                      "view-position");
-        final int height = (int)retrieveNumberFromTextNode(rectNodes, "height");
-        final int width = (int)retrieveNumberFromTextNode(rectNodes, "width");
+        //final int height = (int)retrieveNumberFromTextNode(rectNodes, "height");
+        //final int width = (int)retrieveNumberFromTextNode(rectNodes, "width");
         final int xPos = (int)retrieveNumberFromTextNode(rectNodes, "x-pos");
         final int yPos = (int)retrieveNumberFromTextNode(rectNodes, "y-pos");                 
-        return new Rectangle(xPos, yPos, width, height);
+        //return new Rectangle(xPos, yPos, width, height);
+        return new Point(xPos, yPos);
     }
     
     /*
@@ -272,12 +312,16 @@ public class IdonMapFileHandler implements ErrorHandler
         trans.setOutputProperty(OutputKeys.INDENT, "yes");
         trans.setOutputProperty(OutputKeys.ENCODING, "utf-8");
         
-        trans.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, absoluteDTDPath);
+        //trans.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, absoluteDTDPath);
+        trans.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, DTD_FILE_PATH);
+        
+        trans.setOutputProperty(OutputKeys.STANDALONE, "no");
         trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
 
         final StreamResult res = new StreamResult(file);
         source = new DOMSource(xmlDoc);
-                
+        //xmlDoc.setXmlStandalone(true);   
+        
         try
         {
             trans.transform(source, res);
@@ -311,17 +355,17 @@ public class IdonMapFileHandler implements ErrorHandler
     private Element createViewElement(final IdonMap map)
     {
         final Element viewEl = xmlDoc.createElement("view-position");
-        final Element heightEl = createElementWithText("height", 
+        /*final Element heightEl = createElementWithText("height", 
                             Integer.toString(map.getViewRect().height));
         final Element widthEl = createElementWithText("width", 
-                            Integer.toString(map.getViewRect().width));
+                            Integer.toString(map.getViewRect().width));*/
         final Element xPosEl = createElementWithText("x-pos",
-                            Integer.toString(map.getViewRect().x));
+                            Integer.toString(map.getViewPoint().x));
         final Element yPosEl = createElementWithText("y-pos",
-                            Integer.toString(map.getViewRect().y));
+                            Integer.toString(map.getViewPoint().y));
                             
-        viewEl.appendChild(heightEl);
-        viewEl.appendChild(widthEl);
+        /*viewEl.appendChild(heightEl);
+        viewEl.appendChild(widthEl);*/
         viewEl.appendChild(xPosEl);
         viewEl.appendChild(yPosEl);
         return viewEl;

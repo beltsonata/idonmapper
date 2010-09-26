@@ -1,0 +1,4 @@
+Two versions of the application exist. The main difference is that the _ex 
+allows for multiple-sized hexagons, but is very buggy.
+
+Both versions contain 'compile' and 'run' text files to get them running.

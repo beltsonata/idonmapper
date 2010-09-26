@@ -13,6 +13,7 @@ import java.util.*;
  * Deals with Mouse clicks + movements (actions)
  * for a HexPanel.
  */
+ // no longer used, all done in the Controller
 public class HexPanelListener extends MouseInputAdapter  
 {
     public HexPanelListener()

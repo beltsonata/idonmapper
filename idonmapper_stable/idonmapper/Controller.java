@@ -550,13 +550,25 @@ public class Controller
      * Main method with which to add
      * single Idons to the Hex Panel
      */
-    public static void addIdonToHexPanel(final Coord c, final String idea,
-                                         final Color col, final int size)
+    public static boolean addIdonToHexPanel(final Coord c, 
+                                            final String idea,
+                                            final Color col, 
+                                            final int size)
     {
-        final Idon i = getHexPanel().addIdon(c, idea, col, size);
-        final HashMap<Coord, Idon> map = new HashMap<Coord, Idon>();
-        map.put(i.getCoord(), i);
+        final Idon i = getHexPanel().addIdon(
+                    hexPanel.getCoordFromList(c), idea, col, size);
+        
+        if(i == null)
+        {
+            System.out.println("Failed to add Idon " + i + 
+                            " to the panel...");
+            return false;
+        }
+        
+        //final HashMap<Coord, Idon> map = new HashMap<Coord, Idon>();
+        //map.put(i.getCoord(), i);
         hexPanelChanged = true;
+        return true;
     }
 
     /**
@@ -640,14 +652,13 @@ public class Controller
     }
 
     /**
-     * Deals with mouse events sent
-     * from the HexPanelMouseManager when
-     * a mouse button is l
+     * Deals with mouse pressed events
      */
     protected static void hexPanelMousePressed(final MouseEvent e)
     {
+        //System.out.println("hexPanelMousePressed");
         final HexPanel hp = getHexPanel();
-        //hp.requestFocusInWindow();
+
         mouseDownPoint = e.getPoint();
 
         lastPressedIdon = hexPanel.getIdonFromPoint(mouseDownPoint);
@@ -789,6 +800,8 @@ public class Controller
      */
     protected static void hexPanelMouseDragged(final MouseEvent e)
     {
+        //System.out.println("hexPanelMouseDragged");
+
         if(editor.isEditingIdon())
         {
             return;
@@ -1142,6 +1155,9 @@ public class Controller
             {
                 hexPanelMouseReleased(e);
             }
+        });
+        hexPanel.addMouseMotionListener(new MouseAdapter()
+        {
             public void mouseDragged(final MouseEvent e)
             {
                 hexPanelMouseDragged(e);
@@ -1677,7 +1693,7 @@ public class Controller
         //System.out.println("createIdonMap: name " + name);
         return new IdonMap(name, hexPanel.getHexSize(),
                            hexPanel.getIdons(), suggestions,
-                           hexPanel.visibleArea());
+                           hexPanel.visibleArea().getLocation());
     }
 
 
@@ -1687,6 +1703,7 @@ public class Controller
      */
     private static void saveFile()
     {
+        //System.out.println("dtd:\n" + fileHandler.DTD_STRING);
         final int response = fileChooser.showSaveDialog(f);
         
         if(response == JFileChooser.APPROVE_OPTION)
@@ -1793,6 +1810,7 @@ public class Controller
      */
     private static void openFile()
     {
+        //System.out.println("dtd:\n" + fileHandler.DTD_STRING);
         if(hexPanelChanged)
         {
             final int res = promptUserToSave();
@@ -1828,7 +1846,8 @@ public class Controller
             clearSuggestionData();
             suggestions = map.getSuggestions();
             importIdonMapToHexPanel(map);
-            hexPanel.scrollRectToVisible(map.getViewRect());
+            //hexPanel.scrollRectToVisible(map.getViewRect());
+            hexScroller.getViewport().setViewPosition(map.getViewPoint());
         }
     }
 
@@ -1837,11 +1856,19 @@ public class Controller
      * imported from a file)
      */
     private static void importIdonMapToHexPanel(final IdonMap map)
-    {
+    {   
         hexPanel.setHexSize(map.getCellSize());
-
+        
+        if(!hexPanel.getIdons().isEmpty())
+        {
+            throw new IllegalStateException(
+                    "HexPanel contains Idons! Aborting map "
+                    + "import");
+        }
+        
         for(Idon idon : map.getIdons())
         {
+            System.out.println("adding Idon to panel: " + idon);
             addIdonToHexPanel(idon.getCoord(), idon.getIdea(),
                               idon.getColor(), idon.getSize());
         }
@@ -1849,7 +1876,9 @@ public class Controller
         hexPanelChanged = false;
         mouseDraggingIdon = false;
         mousePressedOnIdon = false;
-
+        lastPressedIdon = null;
+        
+        hexPanel.printIdons();
         /*
          * Clear both stacks
          */
