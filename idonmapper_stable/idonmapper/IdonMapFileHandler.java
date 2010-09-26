@@ -98,10 +98,8 @@ public class IdonMapFileHandler implements ErrorHandler
         
         if(!dtdFile.exists())
         {
-            //throw new NullPointerException("Failed to load dtd file");
             createDTD();
         } 
-        //absoluteDTDPath = dtdFile.getAbsolutePath();
     }
     
     /**
@@ -152,7 +150,7 @@ public class IdonMapFileHandler implements ErrorHandler
      */ 
     private IdonMap retrieveIdonMapData()
     {
-        System.out.println("retrieveIdonMapData");
+        //System.out.println("retrieveIdonMapData");
         String mapName = "";
         int cellSize = -1;
         final List<Idon> idons;
@@ -320,7 +318,6 @@ public class IdonMapFileHandler implements ErrorHandler
 
         final StreamResult res = new StreamResult(file);
         source = new DOMSource(xmlDoc);
-        //xmlDoc.setXmlStandalone(true);   
         
         try
         {
@@ -355,17 +352,12 @@ public class IdonMapFileHandler implements ErrorHandler
     private Element createViewElement(final IdonMap map)
     {
         final Element viewEl = xmlDoc.createElement("view-position");
-        /*final Element heightEl = createElementWithText("height", 
-                            Integer.toString(map.getViewRect().height));
-        final Element widthEl = createElementWithText("width", 
-                            Integer.toString(map.getViewRect().width));*/
+  
         final Element xPosEl = createElementWithText("x-pos",
                             Integer.toString(map.getViewPoint().x));
         final Element yPosEl = createElementWithText("y-pos",
                             Integer.toString(map.getViewPoint().y));
                             
-        /*viewEl.appendChild(heightEl);
-        viewEl.appendChild(widthEl);*/
         viewEl.appendChild(xPosEl);
         viewEl.appendChild(yPosEl);
         return viewEl;
@@ -451,9 +443,8 @@ public class IdonMapFileHandler implements ErrorHandler
     }
     
     /*
-     * For each idon element Node, 
-     * create a new Idon with
-     * the specified coords, idea and color
+     * For each idon element Node, create a new Idon with
+     * the specified coords, idea and color and add to the list of Idons.
      */ 
     private void getIdonInfoFromNode(final Node currentNode, 
                                      List<Idon> idons)
