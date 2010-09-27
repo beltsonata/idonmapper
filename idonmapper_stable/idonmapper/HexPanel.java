@@ -463,7 +463,79 @@ public class HexPanel extends JPanel implements Scrollable
     public void paintToPostScript(final EPSDocumentGraphics2D g2d)
     {
         setUpGraphics2D(g2d);
-        paintIdons(g2d);
+        //paintIdons(g2d);
+        paintIdonList(g2d, idonMap.values());
+    }
+
+    /**
+     * Returns a Dimension enclosing all of the Idons on the grid.
+     * This is used when specifying the size of the PostScript file
+     * in the PostcriptExporter
+     */ 
+    protected Dimension getMapDimension()
+    {       
+        if(idonMap.isEmpty())
+        {
+            return calculateMinimumSize();
+        }       
+        Coord topLeftCoord = null, bottomRightCoord = null;
+        
+        for(final Map.Entry<Coord, Idon> e : idonMap.entrySet())
+        {
+            Coord c = e.getKey();
+            //Idon i = e.getValue();
+            
+            // Locate corner Idons
+            if((topLeftCoord == null) || (c.x < topLeftCoord.x) || 
+               (c.y < topLeftCoord.y))
+            {
+                System.out.println("Changing topLeftCoord: " + c);
+                topLeftCoord = c;
+            }
+            if((bottomRightCoord == null) || (c.x > bottomRightCoord.x) || 
+               (c.y > bottomRightCoord.y))
+            {
+                System.out.println("Changing bottomRightCoord: " + c);
+                bottomRightCoord = c;
+            }
+        }
+        
+        // move the coordinates so the rectangle is a bit 
+        // bigger than the map
+        Coord testCoord = Direction.directionToCoord(topLeftCoord, 
+                                                     Direction.NW);
+        if(testCoord != null)
+        {
+            topLeftCoord = testCoord;
+        }
+        
+        testCoord = Direction.directionToCoord(bottomRightCoord, 
+                                               Direction.SE);
+        if(testCoord != null)
+        {
+            bottomRightCoord = testCoord;
+        }
+            
+            
+        System.out.println("Top left : " + topLeftCoord);
+        System.out.println("Botton right : " + bottomRightCoord);
+        
+        final Point topLeftPoint = getHexagonFromCoord(topLeftCoord)
+                            .getShape().getBounds().getLocation();
+        final Point bottomRightPoint = 
+                            getHexagonFromCoord(bottomRightCoord)
+                            .getShape().getBounds().getLocation();
+        
+        int startX = topLeftPoint.x;
+        int startY = topLeftPoint.y;
+        
+        int width = bottomRightPoint.x - startX;
+        int height = bottomRightPoint.y - startY;
+        
+        System.out.println("used HexPanel width / height: " + width + ", "
+                        + height);
+        
+        return new Dimension(width, height);
     }
 
     private void setUpGraphics2D(final Graphics2D g2)
@@ -1045,6 +1117,7 @@ public class HexPanel extends JPanel implements Scrollable
          * Draw selected Idons next
          */
         paintIdonList(g2, selected);
+        
         /*
          * Finally draw Idon[s] being dragged on top
          */
@@ -1059,6 +1132,7 @@ public class HexPanel extends JPanel implements Scrollable
     {
         for(final Idon i : idons)
         {
+            //System.out.println("drawing " + i);
             i.draw(g2);
         }
     }

@@ -27,14 +27,9 @@ public class SVGExporter
         doc = DOMimp.createDocument(svgURL, "svg", null);
         svgGen = new SVGGraphics2D(doc);
         
-        //Rectangle vis = Controller.getHexPanel().visibleArea();
-        
-        //svgGen.setSVGCanvasSize(new Dimension((int)vis.getWidth(), 
-          //                                    (int)vis.getHeight()));
-        
         svgGen.setSVGCanvasSize(hp.calculateMinimumSize());
            
-        hp.paintComponent(svgGen);
+        hp.paintSVG(svgGen);
         
         if(!setUpFileStream(file))
         {

@@ -19,11 +19,15 @@ public class PostscriptExporter
         try
         {
             final FileOutputStream fos = new FileOutputStream(f);
-            final Dimension d = Controller.getHexPanel().getPreferredSize();
+            //Dimension d = Controller.getHexPanel().getMapDimension();
+            Dimension d = Controller.getHexPanel().calculateMinimumSize();
+                        
             g2d = new EPSDocumentGraphics2D(false);
             g2d.setGraphicContext(new org.apache.xmlgraphics.java2d
                                             .GraphicContext());
+                        
             g2d.setupDocument(fos, d.width, d.height);
+            
             save();
         }
         catch(final IOException e)
