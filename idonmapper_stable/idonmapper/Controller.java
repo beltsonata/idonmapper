@@ -239,8 +239,7 @@ public class Controller
             setUpSetRetriever();
             setUpColors();
             setUpInputPanel();
-            setUpUndoRedo();
-            setUpMenus();
+                        setUpMenus();
             setUpToolBar();
             setUpFrame();
             setUpFileHandler();
@@ -1336,6 +1335,7 @@ public class Controller
      */
     private static void setUpMenus()
     {
+        setUpUndoRedo();
         menuBar = new JMenuBar();
 
         /*
