@@ -10,6 +10,9 @@ public class ObjectString extends Object
 {
     public String s;
     
+    /**
+     * Creates a new ObjectString from an existing String.
+     */ 
     public ObjectString(final String s)
     {
         this.s = s;

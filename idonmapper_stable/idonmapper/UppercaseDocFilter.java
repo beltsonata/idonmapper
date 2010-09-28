@@ -11,6 +11,7 @@ import javax.swing.text.*;
 // Unused.
 public class UppercaseDocFilter extends DocumentFilter
 {
+    
     public UppercaseDocFilter()
     {     
     } 

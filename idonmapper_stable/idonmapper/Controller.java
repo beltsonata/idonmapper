@@ -40,22 +40,11 @@ import org.jdesktop.swingx.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * The master application control module.
- * Creates the idonmapper components and
+ * The idonmapper control module. Creates the idonmapper components and
  * links them together.
  */
 /*
- * Compilation / execution instructions
-   ------------------------------------
-
- * To compile -
-
-   javac -cp :lib/miglayout-3.7.2.jar:lib/jericho-html-3.1.jar:lib/jxlayer.jar:lib/swingx-1.6.1.jar: idonmapper/*java
-
- * To run -
-
-   java -cp :lib/miglayout-3.7.2.jar:lib/jericho-html-3.1.jar:lib/jxlayer.jar:lib/swingx-1.6.1.jar:  idonmapper.Start
-
+ * Please see the README file for information on compilation and running.
  */
 public class Controller
 {
@@ -68,7 +57,6 @@ public class Controller
      * Suggestions retrieved by the SetRetriever
      */
     private static Set<String> suggestions = new HashSet<String>();
-
 
     /*
      * Strings used as the basis for the above
@@ -109,9 +97,7 @@ public class Controller
     /*
      * Amount of cells to put on the HexPanel
      */
-    private static int rows = 150,
-                       cols = 150;
-
+    private static final int rows = 150, cols = 150;
 
     /*
      * hexSize - used as the initial
@@ -1036,11 +1022,11 @@ public class Controller
     /**
      *
      */
-    public static GenericUserEvent popUndoStack()
+    private static GenericUserEvent popUndoStack()
     {
         return popEventStack(undoStack);
     }
-    public static GenericUserEvent popRedoStack()
+    private static GenericUserEvent popRedoStack()
     {
         return popEventStack(redoStack);
     }
@@ -1060,7 +1046,8 @@ public class Controller
             return null;
         }
     }
-    /**
+    
+    /*
      * Sets up the available colours for
      * the Idons on the Hex Panel
      */
@@ -1080,9 +1067,6 @@ public class Controller
         colors.put("purple", new Color(147, 112, 219));
         colors.put("green", new Color(144, 238, 144));
     }
-
-
-
 
     /**
      * Returns the IdonTextEditor object
@@ -1132,6 +1116,10 @@ public class Controller
         }
         return null;
     }
+    
+    /*
+     * Sets up the key listener for the HexPanel.
+     */ 
     private static void setUpHexKeyListener()
     {        
         hexPanel.addKeyListener(new KeyAdapter()
@@ -1142,6 +1130,10 @@ public class Controller
             }            
         });
     }
+    
+    /*
+     * Sets up the mouse listener for the HexPanel.
+     */ 
     private static void setUpHexPanelMouseManager()
     {
         hexPanel.addMouseListener(new MouseAdapter()
@@ -1163,6 +1155,10 @@ public class Controller
             }
         });
     }
+    
+    /*
+     * Inits the HexPanel
+     */ 
     private static void setUpHexPanel()
     {
         hexPanel = new HexPanel(hexSize, rows, cols);
@@ -1170,18 +1166,25 @@ public class Controller
         setUpHexPanelMouseManager();
         setUpHexScroller();
     }
+    /*
+     * Inits the SetRetriever
+     */ 
     private static void setUpSetRetriever()
     {
         //System.out.println("setting up set retriever");
         retriever = new SetRetriever();
     }
+    
+    /*
+     * Inits the KeyboardInputPanel
+     */ 
     private static void setUpInputPanel()
     {
         //System.out.println("setting up input panel");
         inputPanel = new KeyboardInputPanel();
     }
 
-    /**
+    /*
      * Sets up the HexPanel's JScrollPane
      * for scrolling purposes
      */
@@ -1207,8 +1210,6 @@ public class Controller
          * hex panel
          */
         Dimension scrollerSize = hexPanel.calculateMinimumSize();
-        //scrollerSize.width  += hexPanel.PADDING;
-        //scrollerSize.height += hexPanel.PADDING;
         hexScroller.setPreferredSize(scrollerSize);
         scrollHexScrollerToCenter();
     }
@@ -1250,7 +1251,8 @@ public class Controller
     /*
      * Creates the '--' and '+' buttons on the
      * toolbar with which the user can increase
-     * & decrease the size of the hex cells.
+     * & decrease the size of the hex cells 
+     * (when implemented)
      */
     private static void setUpHexSizeButtons()
     {
@@ -1314,12 +1316,8 @@ public class Controller
         toolBar.add(decreaseSizeButton);
         toolBar.add(increaseSizeButton);
     }
-
-
-    /**
-     *
-     */
-    public static boolean allowedToGetHexPanelControl()
+    
+    private static boolean allowedToGetHexPanelControl()
     {
         if(!mouseDraggingIdon && !editor.isEditingIdon())
         {
@@ -1348,6 +1346,9 @@ public class Controller
         menuBar.add(editMenu);
     }
 
+    /*
+     * Sets up the contents of the File Menu and their shortcuts
+     */ 
     private static void setUpFileMenu()
     {
         fileMenu = new JMenu("File");
@@ -1359,6 +1360,9 @@ public class Controller
         setUpQuitAction();
     }
 
+    /*
+     * Initialises the JFileChooser
+     */ 
     private static void setUpFileChooser()
     {
         fileChooser = new JFileChooser();
@@ -1397,7 +1401,6 @@ public class Controller
         editMenu.add(undo);
         editMenu.add(redo);
         setUpConceptDisplayer();
-        //setUpFind();
     }
     
     private static void setUpConceptDisplayer()
@@ -1445,7 +1448,7 @@ public class Controller
     }*/
 
     /**
-     * Utility method to close the JMenus.
+     * Utility method to close file / edit menus 
      */
     protected static void closeMenuPopup()
     {
@@ -1457,7 +1460,7 @@ public class Controller
     }
 
 
-
+    
     private static void setUpQuitAction()
     {
         final JMenuItem quit = new JMenuItem("Quit");
@@ -1492,19 +1495,10 @@ public class Controller
 
     /*
      * Check the user input from a JOptionPane
-     *
      */
     private static boolean isCancelled(final int i)
     {
         if(i == JOptionPane.CANCEL_OPTION)
-        {
-            return true;
-        }
-        return false;
-    }
-    private static boolean isNegative(final int i)
-    {
-        if(i == JOptionPane.NO_OPTION)
         {
             return true;
         }
@@ -1608,7 +1602,10 @@ public class Controller
         fileMenu.add(exportSVG);
     }*/
     
-    
+    /*
+     * Presents the user with a file chooser to specify the file into
+     * which the current HexPanel contents will be written. 
+     */ 
     private static void exportPostScript()
     {
         final int response = fileChooser.showSaveDialog(f);
@@ -1671,6 +1668,10 @@ public class Controller
         }
     }
     */
+    
+    /*
+     * Sets up the PostScript Export command menu item and action.
+     */ 
     private static void setUpExportPostScript()
     {
         final JMenuItem exportPS = new JMenuItem("Export Postscript");
@@ -1686,7 +1687,7 @@ public class Controller
 
     /*
      * Creates an IdonMap object from the current application
-     * state information.
+     * state information so it can be saved / retrieved.
      */
     private static IdonMap createIdonMap(final String name)
     {
@@ -1695,8 +1696,7 @@ public class Controller
                            hexPanel.getIdons(), suggestions,
                            hexPanel.visibleArea().getLocation());
     }
-
-
+    
     /*
      * Defines the procedure to save an
      * Idon Map to file.
@@ -1761,6 +1761,10 @@ public class Controller
         return false;
     }
 
+    /*
+     * Displays a dialog to the user showing that the save file 
+     * operation failed.
+     */ 
     private static void popUpSaveFileFailed()
     {
         JOptionPane.showMessageDialog(f, "Could not write to file.",
@@ -1899,7 +1903,9 @@ public class Controller
                                 JOptionPane.ERROR_MESSAGE);
     }
 
-    
+    /*
+     * Sets the title of the application window.
+     */ 
     private static void setFrameTitle(final String title)
     {
         f.setTitle(title);
