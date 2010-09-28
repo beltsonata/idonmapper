@@ -65,7 +65,7 @@ public class Controller
      * This list is kept to ensure that no
      * duplicate queries are made.
      */
-    private static volatile Set<String> sourceInput = new HashSet<String>();
+    private static Set<String> sourceInput = new HashSet<String>();
 
     private static final String APP_NAME = "idonmapper - untitled";
 
@@ -177,17 +177,14 @@ public class Controller
     private static JXPanel inputSuggestPanel;
 
     /*
-     *
+     * Save / retrieve idon map files
      */
     private static IdonMapFileHandler fileHandler;
 
     /*
-     * Boolean to flag when the
-     * user should be prompted to save
-     * their Idon Map before committing
-     * an action alters the current map
-     * (such as load map, create new map,
-     * quit the application)
+     * Boolean to flag when the user should be prompted to save
+     * before committing an action that will alter the current map
+     * (such as load map, create new map, quit the application)
      */
     private static boolean hexPanelChanged = false;
 
@@ -225,18 +222,20 @@ public class Controller
             setUpSetRetriever();
             setUpColors();
             setUpInputPanel();
-                        setUpMenus();
+            setUpMenus();
             setUpToolBar();
             setUpFrame();
             setUpFileHandler();
             setUp = true;
         }
     }
-
+    
+    /*
+     * Sets up the HexPanel.
+     */ 
     private static void setUpHexPanelComponents()
     {
         setUpHexPanel();
-        setUpHexKeyListener();
         setUpIdonTextEditor();
         //setUpArrowPainter();
     }
@@ -272,17 +271,15 @@ public class Controller
         undoStack = new Stack<GenericUserEvent>();
         redoStack = new Stack<GenericUserEvent>();
     }
-
-
-
-    /**
+    
+    /*
      * Create a map of the Idons
      * to alter, and the color to
      * set them to.
      */
-    private static Map<Coord, Color> createColorMap(
-                                          final Collection<Coord> idons,
-                                          final Color col)
+    private static Map<Coord, Color> createColorMap(final Collection
+                                                    <Coord> idons,
+                                                    final Color col)
     {
         final HashMap<Coord, Color> colorMap = new HashMap<Coord, Color>();
         for(Coord c : idons)
@@ -291,19 +288,6 @@ public class Controller
         }
         return colorMap;
     }
-
-    /**
-     * Returns true if KeyEvent @e matches
-     * the undo key
-     */
-    /*private static boolean isUndoKey(KeyEvent e)
-    {
-        if(e.getKeyCode() == KeyEvent.VK_Z && e.isControlDown())
-        {
-            return true;
-        }
-        return false;
-    }*/
 
     /**
      * Returns true if KeyEvent @e matches
@@ -350,7 +334,8 @@ public class Controller
     {
        return isKey(e.getKeyCode(), KeyEvent.VK_DELETE);
     }
-    public static boolean isShiftKey(final KeyEvent e)
+    
+    /*public static boolean isShiftKey(final KeyEvent e)
     {
        return isKey(e.getKeyCode(), KeyEvent.VK_SHIFT);
     }
@@ -361,9 +346,7 @@ public class Controller
     public static boolean isAltKey(final KeyEvent e)
     {
        return isKey(e.getKeyCode(), KeyEvent.VK_ALT);
-    }
-
-
+    }*/
     private static boolean isKey(final int k1, final int k2)
     {
         if(k1 == k2)
@@ -389,7 +372,7 @@ public class Controller
     {
         shiftIsDown = b;
     }*/
-    /**
+    /*
      * Sets the controlIsDown boolean
      */
     /*protected static void setControlDown(final boolean b)
@@ -403,6 +386,7 @@ public class Controller
     {
         altIsDown = b;
     }*/
+    
     /**
      * Responds to key presses for undo, redo and delete.
      */
@@ -415,22 +399,15 @@ public class Controller
         }
 
         /*
-         * Test the Key for a Color change
-         * command character
+         * Test the Key for a Color change command
          */
         final Color col = getColorFromKeyEvent(e);
         
         if(col != null && allowedToGetHexPanelControl())
         {
             /*
-             * If we have a valid Color from the key,
-             * create a new hash map of the Idons
-             * to change (and to which color) then
-             * send it to the Controller.
-             *
-             *
-             * The Controller will ensure that undo &
-             * redo events are created.
+             * If we have a valid Color from the key, create a new map
+             * of the Idons to change (and to which color) 
              */
             pushToUndoStack(setIdonColors(createColorMap(
                           getHexPanel().getSelectedIdonsCoords(), col)));
@@ -1165,6 +1142,8 @@ public class Controller
         hexPanel.setLayout(null);
         setUpHexPanelMouseManager();
         setUpHexScroller();
+        setUpHexKeyListener();
+        
     }
     /*
      * Inits the SetRetriever
