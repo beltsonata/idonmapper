@@ -1,3 +1,20 @@
+/**
+ * Copyright Sean Talbot 2010.
+ * 
+ * This file is part of idonmapper.
+ * idonmapper is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * idonmapper is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with idonmapper.  If not, see <http://www.gnu.org/licenses/>. 
+ */
 package idonmapper;
 import java.awt.*;
 import javax.swing.*;
@@ -7,7 +24,7 @@ import java.awt.event.*;
 import java.util.*;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.text.*;
-
+import org.jdesktop.swingx.*;
 
 /** 
  * GUI component used to capture the user's  The pop up
@@ -20,17 +37,16 @@ public class KeyboardInputPanel implements ActionListener, KeyListener
      * An editable combo box for the 
      * user to enter ideas. 
      */ 
-    private final JComboBox combo;
-    private final JPanel panel;
-    private final JButton addButton;
-    private final DefaultComboBoxModel mod;
+    private JComboBox combo;
+    private JXPanel panel;
+    private JButton addButton;
+    private DefaultComboBoxModel mod;
     private String prevString;
-    private final Locale locale = Controller.LOCALE;
     
     private final JTextField textField;
 
-    private static final int EMPTY = -1;
-    private static final Dimension d = new Dimension(400, 25);
+    private final int EMPTY = -1;
+    private Dimension d = new Dimension(400, 25);
     
     public static final int TEXT_FIELD_LENGTH = 100;
     
@@ -44,7 +60,7 @@ public class KeyboardInputPanel implements ActionListener, KeyListener
      * pop up menu is highlighted
      * by the user. 
      */ 
-    final SuggestionRenderer renderer;
+    SuggestionRenderer renderer;
     
     /*
      * Alphabetically sorted Set of 
@@ -55,18 +71,19 @@ public class KeyboardInputPanel implements ActionListener, KeyListener
      * The suggestions are sent from the 
      * Controller module.
      */ 
-    private final Set<String> suggestions = new HashSet<String>();
+    private Set<String> suggestions = new HashSet<String>();
     
     /*
      * Suggestions that will actually be 
      * shown in the combo box list are
      * stored here.
      */ 
-    private final Set<String> visibleSuggestions = new TreeSet<String>();
+    //private HashSet<String> visibleSuggestions = new HashSet<String>();
+    private Set<String> visibleSuggestions = new TreeSet<String>();
     
     public KeyboardInputPanel()
     {
-        panel = new JPanel(new MigLayout());
+        panel = new JXPanel(new MigLayout());
         combo = new JComboBox();
         combo.setEditable(true);
         combo.setEnabled(true);
@@ -84,7 +101,6 @@ public class KeyboardInputPanel implements ActionListener, KeyListener
         textField.addActionListener(this);
         textField.addKeyListener(this);
         textField.setFocusTraversalKeysEnabled(false);
-        addButton = new JButton("OK");
         setUpAddButton();
         addButton.setFocusable(false);
         panel.add(addButton);
@@ -111,11 +127,13 @@ public class KeyboardInputPanel implements ActionListener, KeyListener
      */ 
     private void setUpAddButton()
     {
+        addButton = new JButton("OK");
         addButton.addActionListener(new ActionListener()
         {
-            public void actionPerformed(final ActionEvent ae)
+            public void actionPerformed(ActionEvent ae)
             {
                 performNewIdonCreationAction();
+                
             }
         });
     }
@@ -128,7 +146,7 @@ public class KeyboardInputPanel implements ActionListener, KeyListener
      * This is public due to the implementation
      * specifics. 
      */ 
-    public void	keyReleased(final KeyEvent e)
+    public void	keyReleased(KeyEvent e)
     {
         dealWithKeyReleased(e);
     } 
@@ -138,9 +156,9 @@ public class KeyboardInputPanel implements ActionListener, KeyListener
      * by the KeyListener on the JComboBox's
      * text field.
      */ 
-    private void dealWithKeyReleased(final KeyEvent e)
+    private void dealWithKeyReleased(KeyEvent e)
     {
-        final String current = getCurrentTextFieldString();
+        String current = getCurrentTextFieldString();
         
         if(e.getKeyCode() == KeyEvent.VK_UP)
         {
@@ -166,22 +184,24 @@ public class KeyboardInputPanel implements ActionListener, KeyListener
             prevString = current;
             return;
         }
-        if(prevString != null && current.equals(prevString))
+        if(prevString != null)
         {
-            prevString = current;
-            updateVisibleSuggestions(current);
-        }              
+            if(!current.equals(prevString))
+            {
+                prevString = current;
+                updateVisibleSuggestions(current);
+            }              
+        }
         else
         {
             prevString = current;
         }
     } 
     
-    /**
-     * This is a public method because it deals with AWTKeyEvents.
-     * It should not be used directly by the programmer.
+    /*
+     * 
      */ 
-    public void	keyPressed(final KeyEvent e)
+    public void	keyPressed(KeyEvent e)
     {
         if(e.getKeyCode() == KeyEvent.VK_TAB)
         {
@@ -190,18 +210,12 @@ public class KeyboardInputPanel implements ActionListener, KeyListener
         } 
     } 
     
-    /*
-     * Moves focus to the HexPanel.
-     */ 
     private void tabToHexPanel()
     {
         Controller.getHexPanel().requestFocus();      
     }
     
-    /*
-     * Unused, unattractive boiler plate.
-     */ 
-    public void	keyTyped(final KeyEvent e){} 
+    public void	keyTyped(KeyEvent e){} 
     
    
     /**
@@ -215,7 +229,7 @@ public class KeyboardInputPanel implements ActionListener, KeyListener
      * a JComboBox itself makes it impossible to tell
      * what action is actually taking place.)
      */ 
-    public void actionPerformed(final ActionEvent ae)
+    public void actionPerformed(ActionEvent ae)
     {        
         performNewIdonCreationAction();
     }
@@ -228,23 +242,22 @@ public class KeyboardInputPanel implements ActionListener, KeyListener
      * This should not be called apart from by 
      * the custom cell renderer.
      */ 
-    protected void mouseReleasedOnSuggestion(final MouseEvent e)
+    protected void mouseReleasedOnSuggestion(MouseEvent e)
     {
         if(SwingUtilities.isLeftMouseButton(e))
         {
-            final JList list = renderer.getList();
-            final Point p = e.getPoint();
-            final int index = list.locationToIndex(p);
-            
+            JList list = renderer.getList();
+            Point p = e.getPoint();
+            int index = list.locationToIndex(p);
             if(index != EMPTY)
             {
                 /*
                  * Check that cell was clicked
                  */ 
-                final Rectangle rect = list.getCellBounds(index, index);
+                Rectangle rect = list.getCellBounds(index, index);
                 if(rect.contains(p))
                 {
-                    //unnecessary-> final Object sugg = mod.getElementAt(index);
+                    Object sugg = mod.getElementAt(index);
                     performNewIdonCreationAction();
                 }
             }
@@ -256,7 +269,7 @@ public class KeyboardInputPanel implements ActionListener, KeyListener
      * implementation of the above actionPerformed()
      * method. 
      */ 
-    private final void performNewIdonCreationAction()
+    private void performNewIdonCreationAction()
     {   
         if(combo.isPopupVisible())
         {         
@@ -264,11 +277,10 @@ public class KeyboardInputPanel implements ActionListener, KeyListener
              * Check to see if there is a focused
              * object in the popup menu 
              */ 
-            final int in = renderer.getSelectedIndex();
-            
+            int in = renderer.getSelectedIndex();
             if(in >= 0)
             {
-                final Object o = mod.getElementAt(in);
+                Object o = mod.getElementAt(in);
                 
                 /*
                  * If so, use this text instead of the
@@ -281,9 +293,8 @@ public class KeyboardInputPanel implements ActionListener, KeyListener
         }
         else
         {
-            final String input = textField.getText();     
+            String input = textField.getText();     
             clearComboList();
-            
             if(input == null)
             {
                 return;
@@ -298,9 +309,9 @@ public class KeyboardInputPanel implements ActionListener, KeyListener
     }
     
     /**
-     * Returns the JPanel so it can be added to the main frame.
+     * Returns the JXPanel so it can be added to the main frame.
      */  
-    protected JPanel getPanel()
+    protected JXPanel getPanel()
     {
         return panel;
     }
@@ -310,50 +321,59 @@ public class KeyboardInputPanel implements ActionListener, KeyListener
      * that will appear below the text area of the
      * combo box when the user types the text field. 
      */ 
-    private void updateVisibleSuggestions(final String s)
+    private void updateVisibleSuggestions(String s)
     {
         /*
          * Only update the suggestions if we
          * have received some from the Google
          * Sets via the Controller
          */ 
-        if(hasSuggestions && !suggestions.isEmpty())
-        {
-            createVisibleSuggestions(s);
-            addSuggestionsToComboBox(s);
-        }
+        if(hasSuggestions)
+        {   
+            if(suggestions.size() > 0)
+            {
+                /*if(s.length() == 0)
+                {
+                    return;
+                }*/
+                createVisibleSuggestions(s);
+                addSuggestionsToComboBox(s);
+            }
+        }   
     }
-     
+    
+    
     
     /*
      * Adds the set of visible suggestions to the
      * combo box. 
      */
-    private void addSuggestionsToComboBox(final String str)
+    private void addSuggestionsToComboBox(String str)
     {
         /*
          * Close the pop up menu prior to changing 
          * its list contents
          */ 
         combo.setPopupVisible(false); 
-        final ObjectString user = new ObjectString(str);
+        ObjectString user = new ObjectString(str);
         mod.removeAllElements();
         
         mod.insertElementAt(user, 0);
         mod.setSelectedItem(user);
         
-        for(final String s : visibleSuggestions)
+        for(String s : visibleSuggestions)
         {
-            /*
-             * Check if the suggestion
-             * is the same as the user
-             * input before adding
-             */
-            if(!comboContainsString(s) 
-                &&
-               !s.equals(user.toString().toLowerCase(locale)))
+            if(!comboContainsString(s))
             {
-                mod.addElement(new ObjectString(s));
+                /*
+                 * Check if the suggestion
+                 * is the same as the user
+                 * input before adding
+                 */ 
+                if(!s.equals(user.toString().toLowerCase()))
+                {
+                    mod.addElement(new ObjectString(s));
+                }
             }
         }
         
@@ -372,6 +392,7 @@ public class KeyboardInputPanel implements ActionListener, KeyListener
         {
             combo.setPopupVisible(true);        
         }
+        return;
     }
     
     /*
@@ -387,17 +408,18 @@ public class KeyboardInputPanel implements ActionListener, KeyListener
         }
     }
     
-    private boolean comboContainsString(final String s)
+    private boolean comboContainsString(String s)
     {
         for(int i = 0; i < mod.getSize(); i++)
         {
-            final Object o = mod.getElementAt(i);
-            if(o.toString().toLowerCase(locale).equals(s.toLowerCase(locale)))
+            Object o = mod.getElementAt(i);
+            if(o.toString().toLowerCase().equals(s.toLowerCase()))
             {
                 return true;
             }
         }
         return false;
+        
     }
     
     /*
@@ -405,26 +427,28 @@ public class KeyboardInputPanel implements ActionListener, KeyListener
      * based on input with which to
      * populate the combo box.
      */ 
-    private void createVisibleSuggestions(final String input)
+    private void createVisibleSuggestions(String input)
     {
         /*
          * Clear the list of visible Strings
          * and Start afresh
          */ 
         visibleSuggestions.clear();
+        assert(visibleSuggestions.size() == 0);
         
-        if(input == null || input.isEmpty())
+        if(input == null || input.length() == 0)
         {
             //System.out.println("zero length input: show all suggestions");
-            for(final String s : suggestions)
+            for(String s : suggestions)
             {
                 visibleSuggestions.add(s);
             }
             return;
         }
-        for(final String s : suggestions)
+        
+        for(String s : suggestions)
         {
-            if(s.toLowerCase(locale).startsWith(input.toLowerCase(locale)))
+            if(s.toLowerCase().startsWith(input.toLowerCase()))
             {
                 visibleSuggestions.add(s);
             }   
@@ -451,7 +475,7 @@ public class KeyboardInputPanel implements ActionListener, KeyListener
      * @param suggs The collection of Strings
      * to add to the suggestions TreeSet.
      */ 
-    protected void addSuggestions(final Collection<String> suggs)
+    protected void addSuggestions(Collection<String> suggs)
     {
         suggestions.addAll(suggs);   
         hasSuggestions = true;    
@@ -469,5 +493,6 @@ public class KeyboardInputPanel implements ActionListener, KeyListener
         combo.setPopupVisible(false);
         mod.removeAllElements();
         textField.setText(null);
+        //mod.setSelectedItem(null);
     }
 }

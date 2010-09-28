@@ -1,8 +1,8 @@
-README file for :
-
-idonmapper v0.01 by Sean Talbot
+idonmapper v0.01 by Sean Talbot. Contact: sean.talbot@gmail.com
 --------------------------------
 
+This README file contains the information to run idonmapper. For information on how to use the program, please see the
+manual in the 'idonmapper_stable/docs' folder.
 
 Introduction
 ------------
@@ -12,13 +12,13 @@ by Anthony Hodgson in his 'Hexagons for Systems Thinking' paper (a copy of which
 http://www.decisionintegrity.co.uk/Hexagons%2520for%2520systems%2520thinking.pdf ). Google Sets (http://labs.google.com/sets)
 acts as a 'suggestion' engine to find related concepts, which may be included in maps.
 
-Generated maps may be saved or loaded to an XML file, and can be exported to (currently) PostScript.
+Generated maps may be saved or loaded to an XML file, and can be exported as images to PostScript.
 
 
 Stable and experimental
 -----------------------
 
-Please note that there are two versions of the software. The 'stable' version allows for map-creation with a single size of
+Please note there are two versions of the software. The 'stable' version allows for map-creation with a single size of
 hexagon, but the overall program is more polished, tested and developed. The 'experimental' version should be regarded as
 a development version, in which the use of varying-sized hexagons is being tried out. As a result, the information below should be
 regarded as relevant to both versions but focused on the stable version.
@@ -67,7 +67,7 @@ http://www.java.com/en/download/manual.jsp
 and select the option for your operating system.
 
 
-Using the program
+Running the program
 -----------------
 
 The program may be run in the following ways
