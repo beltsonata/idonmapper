@@ -75,10 +75,9 @@ public class Controller
                            mousePressedOnIdon = false,
                            setUp = false;
 
-    private static Idon //editedIdon = null,
-                        lastPressedIdon = null;
+    private static Idon lastPressedIdon = null;
 
-    private static Dimension d = new Dimension(800, 600);
+    private static final Dimension d = new Dimension(800, 600);
 
     private static final int VERT_SCROLL_INCR = 20,
                              HORI_SCROLL_INCR = 20,
@@ -813,7 +812,7 @@ public class Controller
             /*
              * Mouse pressed on Idon
              */
-            if(lastPressedIdon.getSelectedStatus())
+            if(lastPressedIdon.isSelected())
             {
                 /*
                  * If selected, move this and any other
@@ -2092,7 +2091,7 @@ public class Controller
          * to the Idon when it's at the new position
          */
 
-        final boolean selectedStatus = i.getSelectedStatus();
+        final boolean selectedStatus = i.isSelected();
         hp.removeIdon(oldPos);
 
         hp.addIdon(newPos, i.getIdea(), i.getColor(), i.getSize());

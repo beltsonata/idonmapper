@@ -586,7 +586,7 @@ public class Idon extends Hexagon
      * Return's whether or not this
      * Idon is selected
      */
-    protected boolean getSelectedStatus()
+    protected boolean isSelected()
     {
         return isSelected;
     }

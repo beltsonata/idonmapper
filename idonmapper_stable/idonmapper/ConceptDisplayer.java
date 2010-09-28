@@ -14,7 +14,7 @@ import net.miginfocom.swing.MigLayout;
  */ 
 public class ConceptDisplayer
 {
-    private JDialog dialog;
+    private final JDialog dialog;
     private static JList list;
     private static boolean MODAL = true;
     private JScrollPane scroller;
@@ -26,6 +26,10 @@ public class ConceptDisplayer
     private static final String PROTO = "-----------------------------------------";
     private final Locale locale = Controller.LOCALE;
     
+    /**
+     * Creates the ConceptDisplayer and associates it with the main
+     * window and HexPanel.
+     */ 
     public ConceptDisplayer(final JFrame f, final HexPanel hp)
     {      
         dialog = new JDialog(f, "Concepts", MODAL);
@@ -35,8 +39,6 @@ public class ConceptDisplayer
         scroller = new JScrollPane();
         scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
     }
-    
-   
     
     /**
      * Displays the ConceptDisplayer to the user.
@@ -58,7 +60,6 @@ public class ConceptDisplayer
      */ 
     private void addEscapeListener()
     {
-        
         final ActionListener escaper = new ActionListener() 
         {
             public void actionPerformed(final ActionEvent e)
@@ -112,8 +113,7 @@ public class ConceptDisplayer
                    
                     Idon i = ideaIdonMap.get(o);
                     hexPanel.scrollRectToVisible(i.getShape().getBounds());
-                }
-                
+                }                
             };
         };
         list.addMouseListener(mouseListener);
@@ -137,8 +137,6 @@ public class ConceptDisplayer
     private void getIdeas()
     {
         idons = hexPanel.getIdons();
-
-        //ideaIdonMap = new TreeMap<String, Idon>();
         ideaIdonMap = new HashMap<ObjectString, Idon>();
         
         for(Idon i : idons)
@@ -148,8 +146,4 @@ public class ConceptDisplayer
             ideaIdonMap.put(new ObjectString(s), i);
         }
     }
-    
-    
-
-
 }

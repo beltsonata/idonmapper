@@ -251,7 +251,7 @@ public class HexPanel extends JPanel implements Scrollable
 
         for(final Idon i : idonMap.values())
         {
-            if(i.getSelectedStatus())
+            if(i.isSelected())
             {
                 sel.add(i);
             }
@@ -1099,7 +1099,7 @@ public class HexPanel extends JPanel implements Scrollable
                 {
                     dragged.add(i);
                 }
-                else if(i.getSelectedStatus())
+                else if(i.isSelected())
                 {
                     selected.add(i);
                 }
@@ -1301,7 +1301,7 @@ public class HexPanel extends JPanel implements Scrollable
     {
         for(final Idon i : idonMap.values())
         {
-            if(i.getSelectedStatus())
+            if(i.isSelected())
             {
                 i.deselect();
             }

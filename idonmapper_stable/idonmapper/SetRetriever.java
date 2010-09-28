@@ -31,8 +31,14 @@ public class SetRetriever
      * Multiple constructors in for flexibility
      * when creating new SetRetrievers.
      */
+    /**
+     * Creates a new retriver.
+     */  
     public SetRetriever(){}
 
+    /**
+     * Creates a new retriever from a set of ideas.
+     */ 
     public SetRetriever(final Set<String> ideas, final boolean isLargeSet)
     {
     	this(new ArrayList<String>(ideas), isLargeSet);
