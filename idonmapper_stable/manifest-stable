@@ -1,0 +1,4 @@
+Main-Class: idonmapper.Start
+Class-Path: lib/jxlayer.jar lib/swingx-1.6.1.jar lib/jxlayer.jar lib/xmlgraphics-commons-1.4.jar lib/miglayout-3.7.2.jar lib/jericho-html-3.1.jar
+Implementation-Title: idonmapper
+Implementation-Version: 0.01

@@ -1,4 +1,190 @@
-Two versions of the application exist. The main difference is that the _ex 
-allows for multiple-sized hexagons, but is very buggy.
+README file for :
 
-Both versions contain 'compile' and 'run' text files to get them running.
+idonmapper v0.01 by Sean Talbot
+--------------------------------
+
+
+Introduction
+------------
+
+This is a graphical java application to enable the creation of complex hexagonal mind/concept-maps as described
+by Anthony Hodgson in his 'Hexagons for Systems Thinking' paper (a copy of which may be found at
+http://www.decisionintegrity.co.uk/Hexagons%2520for%2520systems%2520thinking.pdf ). Google Sets (http://labs.google.com/sets)
+acts as a 'suggestion' engine to find related concepts, which may be included in maps.
+
+Generated maps may be saved or loaded to an XML file, and can be exported to (currently) PostScript.
+
+
+Stable and experimental
+-----------------------
+
+Please note that there are two versions of the software. The 'stable' version allows for map-creation with a single size of
+hexagon, but the overall program is more polished, tested and developed. The 'experimental' version should be regarded as
+a development version, in which the use of varying-sized hexagons is being tried out. As a result, the information below should be
+regarded as relevant to both versions but focused on the stable version.
+
+
+License
+-------
+
+This software is released under the GNU GENERAL PUBLIC LICENSE, Version 3, a copy of which should be present at
+
+docs/license.txt.
+
+
+Requirements
+------------
+
+Hardware
+--------
+
+This software was developed and tested on a PC with the following specs:
+
+Intel Pentium 4 2.8ghz 32-bit CPU
+1gb of RAM
+nVidia 7600se 512mb graphics card
+
+but it should perform adequately on slightly lower specs than this (i.e. ~1ghz CPU, 512mb RAM).
+
+
+Software
+--------
+
+The program requires that the Java Runtime Environment 1.6 or higher is installed.
+
+To check you can try running
+
+java
+
+from the command line to see if it is a recognised command. If it is, you can try
+
+java -version
+
+to see if you have a compatible version installed.If not, please download and install Java from
+
+http://www.java.com/en/download/manual.jsp
+
+and select the option for your operating system.
+
+
+Using the program
+-----------------
+
+The program may be run in the following ways
+
+1) compiling from the java source and running manually;
+
+2) running from the pre-compiled class files;
+
+    or (the easiest)
+
+3)  via the executable .jar file.
+
+Please note that it is necessary to download third-party jar files for any of the above options chosen.
+
+Obtaining the third-party jar files
+-----------------------------------
+
+This (stable) version of the program relies on the following third-party jar files which *must* by present in
+the 'lib' folder in order for it to compile and run:
+
+                    NOTE these can *ALL* be downloaded easily via the project page on Github:
+
+                    http://github.com/beltsonata/idonmapper/tree/master/idonmapper_stable/lib/
+
+Alternatively, they can be downloaded individually from:
+
+jar                             URI
+---                             ---
+jxlayer.jar                     https://jxlayer.dev.java.net/bin/jxlayer.jar
+swingx-1.6.1.jar                https://swingx.dev.java.net/servlets/ProjectDocumentList?folderID=12289&expandFolder=12289&folderID=6868
+jericho-html-3.1.jar            http://sourceforge.net/projects/jerichohtml/files/jericho-html/3.1/jericho-html-3.1.zip/download
+miglayout-3.7.2.jar             http://www.migcalendar.com/miglayout/versions/3.7.2/miglayout-3.7.2.jar
+xmlgraphics-commons-1.4.jar     http://www.mirrorservice.org/sites/ftp.apache.org/xmlgraphics/commons/binaries/xmlgraphics-commons-1.4-bin.tar.gz
+
+
+Compiling from source
+---------------------
+
+*Please make sure the above jar files have been located and placed in the 'lib' directory before continuing.*
+
+There should exist a file (use 'compile.sh' for Linux/Max, 'compile.bat' on Windows) containing the command to compile
+the program. This can be executed from the command line (DOS prompt 'cmd.exe' in Windows) by using
+
+cd [PATH]
+
+to move to the idonmapper_stable directory, followed by entering the name of the file. The file may first need to be made
+executable on Linux / Macintosh using
+
+chmod +x [FILE NAME]
+
+If the file is missing, then the following command will compile the software
+
+On Linux/Mac
+-------------
+
+javac -cp :lib/miglayout-3.7.2.jar:lib/jericho-html-3.1.jar:lib/jxlayer.jar:lib/swingx-1.6.1.jar:lib/xmlgraphics-commons-1.4.jar: idonmapper/*.java
+
+
+On Windows
+----------
+
+javac -cp ;lib/miglayout-3.7.2.jar;lib/jericho-html-3.1.jar;lib/jxlayer.jar;lib/swingx-1.6.1.jar;lib/xmlgraphics-commons-1.4.jar; idonmapper/*.java
+
+
+Running the compiled classes
+---------------------------------
+
+*Please make sure the above jar files have been located and placed in the 'lib' directory before continuing.*
+
+There should exist a file (use 'run.sh' for Linux/Max, 'run.bat' on Windows) containing the command to run
+the program. This can be executed from the command line (DOS prompt 'cmd.exe' in Windows) by using
+
+cd [PATH]
+
+to move to the idonmapper_stable directory, followed by entering the name of the file. The file may first need to be made
+executable on Linux / Macintosh using
+
+chmod +x [FILE NAME]
+
+If the file is missing, then the following commands will compile the software
+
+On Linux/Mac
+-------------
+
+java -cp :lib/miglayout-3.7.2.jar:lib/jericho-html-3.1.jar:lib/jxlayer.jar:lib/swingx-1.6.1.jar:lib/xmlgraphics-commons-1.4.jar: idonmapper.Start
+
+
+On Windows
+----------
+
+java -cp ;lib/miglayout-3.7.2.jar;lib/jericho-html-3.1.jar;lib/jxlayer.jar;lib/swingx-1.6.1.jar;lib/xmlgraphics-commons-1.4.jar; idonmapper.Start
+
+
+Running the jar file
+--------------------
+
+*Please make sure the above jar files have been located and placed in the 'lib' directory before continuing.*
+
+There should be a file named idonmapper.jar file in the base directory of this version of the application.
+
+The file may need to be made executable on Linux / Macintosh using
+
+chmod +x [FILE NAME]
+
+The file may then be executed by doubled clicking on it or by typing its name into the command line.
+
+
+Creating a jar from the compiled classes
+----------------------------------------
+
+You may wish to create a jar out of compiled sources yourself. There should be two files present in the directory
+
+jar-stable
+manifest-stable
+
+These are both required. jar-stable contains a template command to create a jar based upon the contents of the idonmapper
+and idonmapper/Event source directories. Note that this and the manifest-stable file may need editing if you include other
+classes / jars.
+
+

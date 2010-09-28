@@ -3,10 +3,7 @@ package idonmapper;
 import java.io.*;
 import java.net.*;
 import java.util.*;
-//import org.w3c.dom.*;
 import net.htmlparser.jericho.*;
-
-
 
 /**
  * Retrieves suggestions from Google Sets based upon 1-4 strings.
@@ -31,6 +28,7 @@ public class SetRetriever
      * Multiple constructors in for flexibility
      * when creating new SetRetrievers.
      */
+     
     /**
      * Creates a new retriver.
      */  

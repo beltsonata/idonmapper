@@ -1,0 +1,4 @@
+# here is the template to create a jar from the idonmapper (stable) source code
+# remember that the jar will need to be made executable on *NIX operating systems.
+
+jar cfm idonmapper.jar manifest-stable idonmapper/*.class idonmapper/Event/*.class docs README
