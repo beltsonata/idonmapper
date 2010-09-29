@@ -29,10 +29,10 @@ public enum Direction
 
     Direction(){}
     
-    /**
+    /*
      * Returns the opposite direction to @dir.
      */
-    public static Direction getOpposite(final Direction dir)
+    /*public static Direction getOpposite(final Direction dir)
     {
         switch(dir)
         {
@@ -50,7 +50,7 @@ public enum Direction
                 return NE;
         }
         return null;
-    }
+    }*/
     
     
     
