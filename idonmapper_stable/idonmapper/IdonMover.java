@@ -37,6 +37,9 @@ public class IdonMover
     private Map<Idon, Double> xDists, yDists;
     private Map<Idon, Coord> initialPositions;
     
+    /**
+     * Starts a mouse-dragging move for one or more Idon. 
+     */ 
     public IdonMover(final Idon dragged, final Collection<Idon> allSelected)
     {
         this.dragged = dragged;
@@ -86,6 +89,10 @@ public class IdonMover
         }
     }
     
+    /*
+     * Resets the Idons to their original locations, in case something went
+     * wrong during relocation.
+     */ 
     private void resetIdons()
     {
         for(final Idon i : allSelected)

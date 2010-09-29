@@ -115,14 +115,9 @@ public class HexPanel extends JPanel implements Scrollable
     public static final int MAX_COLUMNS = 200, MAX_ROWS = 200,
                             HEX_SIZE_INCR = 5;
 
-    /*
-     * A matcher object to match Patterns sent from the Idon Finder
-     * object
-     */
-    //public Matcher matcher;
 
-    /*
-     * HexPanel()
+
+    /**
      * Create a HexPanel with the specified number of rows
      * and columns.
      */
@@ -171,7 +166,6 @@ public class HexPanel extends JPanel implements Scrollable
          * hex cells.
          */
         hexDist = hexSize * Math.sqrt(3);
-        //r = Math.cos(ANGLE) * hexSize;
         setGridDimensions();
     }
     
