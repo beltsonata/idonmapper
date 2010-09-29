@@ -1,8 +1,8 @@
 idonmapper v0.01 by Sean Talbot. Contact: sean.talbot@gmail.com
 --------------------------------
 
-This README file contains the information to run idonmapper. For information on how to use the program, please see the
-manual in the 'idonmapper_stable/docs' folder.
+This READ_ME file contains the information to run the application. For information on how to use the program, please see the
+manuals, which exist in various formats, in the 'idonmapper_stable/docs' folder.
 
 Introduction
 ------------
@@ -30,10 +30,7 @@ regarded as relevant to both versions but focused on the stable version.
 License
 -------
 
-This software is released under the GNU GENERAL PUBLIC LICENSE, Version 3, a copy of which should be present at
-
-docs/license.txt.
-
+This software is released under the GNU GENERAL PUBLIC LICENSE, Version 3, a copy of which should be present in docs/license.txt.
 
 Requirements
 ------------
