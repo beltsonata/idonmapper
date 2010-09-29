@@ -2164,6 +2164,13 @@ public class Controller
      */
     protected static void undo()
     {
+        if(!allowedToGetHexPanelControl())
+        {
+            System.out.println("can't undo -> either editing or "
+                              + " dragging an Idon");
+            return;
+        }
+        
         //System.out.println("undo !");
         final GenericUserEvent e = popUndoStack();
         if(e == null)
@@ -2180,6 +2187,12 @@ public class Controller
      */
     protected static void redo()
     {
+        if(!allowedToGetHexPanelControl())
+        {
+            System.out.println("can't redo -> either editing or "
+                              + " dragging an Idon");
+            return;
+        }
         //System.out.println("redo !");
         final GenericUserEvent e = popRedoStack();
         if(e == null)

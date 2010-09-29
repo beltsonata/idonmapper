@@ -198,8 +198,8 @@ public class KeyboardInputPanel implements ActionListener, KeyListener
         }
     } 
     
-    /*
-     * 
+    /**
+     * Used by the KeyListener to enable tabbing to the Controller.
      */ 
     public void	keyPressed(KeyEvent e)
     {
