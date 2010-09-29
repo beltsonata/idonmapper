@@ -27,7 +27,7 @@ import java.util.*;
 /**
  * Represents a Hexagon shape. 
  */
-public class Hexagon// implements HexPanelObject
+public class Hexagon
 {
     private static final int HEX = 6,
                              HALF_HEX = 3;
