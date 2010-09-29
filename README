@@ -8,8 +8,11 @@ Introduction
 ------------
 
 This is a graphical java application to enable the creation of complex hexagonal mind/concept-maps as described
-by Anthony Hodgson in his 'Hexagons for Systems Thinking' paper (a copy of which may be found at
-http://www.decisionintegrity.co.uk/Hexagons%2520for%2520systems%2520thinking.pdf ). Google Sets (http://labs.google.com/sets)
+by Anthony Hodgson in his 'Hexagons for Systems Thinking' paper, a copy of which may be found at
+
+http://www.decisionintegrity.co.uk/Hexagons%2520for%2520systems%2520thinking.pdf
+
+. Google Sets (http://labs.google.com/sets)
 acts as a 'suggestion' engine to find related concepts, which may be included in maps.
 
 Generated maps may be saved or loaded to an XML file, and can be exported as images to PostScript.

@@ -72,11 +72,8 @@ public class HexPanel extends JPanel implements Scrollable
                              QUAD = 4;
 
     private final int rows, columns;
-
     private static final int ANGLE = 30;
-
     private static final float HALF = 0.5f;
-    
     private static final float StrokeWidth = 1.2f;
 
 
@@ -114,9 +111,7 @@ public class HexPanel extends JPanel implements Scrollable
                                PADDING = 15;
     public static final int MAX_COLUMNS = 200, MAX_ROWS = 200,
                             HEX_SIZE_INCR = 5;
-
-
-
+                            
     /**
      * Create a HexPanel with the specified number of rows
      * and columns.
@@ -203,8 +198,12 @@ public class HexPanel extends JPanel implements Scrollable
         dragRect = r;
     }
 
-
-    private void checkArgs(final double hexSize, final int rows, final int columns)
+    /*
+     * Utility method to check the arguments sent to this HexPanel
+     * from the Controller.
+     */ 
+    private void checkArgs(final double hexSize, final int rows, 
+                                                 final int columns)
     {
         boolean bad = false;
 
@@ -297,7 +296,7 @@ public class HexPanel extends JPanel implements Scrollable
     {
         if(rect == null)
         {
-            throw new NullPointerException("getOverlappingCellCoord: "
+            throw new IllegalStateException("getOverlappingCellCoord: "
                                            + " rectangle sent is null");
         }
         final List<Idon> overlap = new ArrayList<Idon>();
@@ -366,7 +365,6 @@ public class HexPanel extends JPanel implements Scrollable
         }
         return emptyNeighbours;
     }
-
 
     /*
      * Returns the coordinate on the grid

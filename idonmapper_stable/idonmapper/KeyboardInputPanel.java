@@ -55,21 +55,16 @@ public class KeyboardInputPanel implements ActionListener, KeyListener
     /*
      * Custom renderer for combo's cells.
      * 
-     * This allows keeping track of
-     * which of the strings in the
-     * pop up menu is highlighted
+     * This is for keeping track of which string in the pop up menu is highlighted
      * by the user. 
      */ 
     SuggestionRenderer renderer;
     
     /*
-     * Alphabetically sorted Set of 
-     * Strings used as suggestions  for 
-     * the user to input to the 
+     * Set of Strings used as suggestions for the user to input to the 
      * HexPanel. 
      * 
-     * The suggestions are sent from the 
-     * Controller module.
+     * The suggestions are sent here from the Controller module.
      */ 
     private Set<String> suggestions = new HashSet<String>();
     
@@ -78,9 +73,11 @@ public class KeyboardInputPanel implements ActionListener, KeyListener
      * shown in the combo box list are
      * stored here.
      */ 
-    //private HashSet<String> visibleSuggestions = new HashSet<String>();
     private Set<String> visibleSuggestions = new TreeSet<String>();
     
+    /**
+     * Creates and initialises the KeyboardInputPanel.
+     */ 
     public KeyboardInputPanel()
     {
         panel = new JXPanel(new MigLayout());
@@ -177,8 +174,7 @@ public class KeyboardInputPanel implements ActionListener, KeyListener
              * Close the pop up menu while
              * a new set of suggestions
              * is created.
-             */ 
-            //combo.setPopupVisible(false);         
+             */         
             mod.removeAllElements();
             updateVisibleSuggestions(current);
             prevString = current;
