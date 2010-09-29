@@ -298,7 +298,7 @@ public class Controller
                                                     <Coord> idons,
                                                     final Color col)
     {
-        final HashMap<Coord, Color> colorMap = new HashMap<Coord, Color>();
+        final Map<Coord, Color> colorMap = new HashMap<Coord, Color>();
         for(Coord c : idons)
         {
             colorMap.put(c, col);
@@ -1678,6 +1678,8 @@ public class Controller
                 exportPostScript();
             }
         });
+        //exportPS.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
+          //                                          Event.CTRL_MASK));
         fileMenu.add(exportPS);
     }
 

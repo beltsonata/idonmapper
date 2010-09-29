@@ -16,8 +16,6 @@
  * along with idonmapper.  If not, see <http://www.gnu.org/licenses/>. 
  */ 
 
-
-
 package idonmapper;
 import java.awt.*;
 import javax.swing.*;
@@ -41,7 +39,7 @@ public class ConceptDisplayer
     private HexPanel hexPanel;
     private static Set<Idon> idons;
     private static Map<ObjectString, Idon> ideaIdonMap;
-    private static int CLICKS = 2;
+    private static final int CLICKS = 1;
     private static final Dimension dim = new Dimension(200, 100);
     private static final String PROTO = "-----------------------------------------";
     private final Locale locale = Controller.LOCALE;
